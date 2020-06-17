@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
   player.associate = function (models) {
     player.belongsTo(models.game);
     player.hasMany(models.trade);
-    player.hasMany(models.messages);
+    player.hasMany(models.message);
     player.belongsToMany(models.resource, {
       through: "playerResources",
       foreignKey: "playerId",
