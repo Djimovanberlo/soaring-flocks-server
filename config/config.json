@@ -1,6 +1,9 @@
 {
   "development": {
-    "url": "YOUR_ELEPHANTSQL_URL_HERE",
+    "username": "postgres",
+    "password": "secret",
+    "database": "soaring_flocks_development",
+    "host": "localhost",
     "dialect": "postgres",
     "operatorsAliases": "0"
   },
