@@ -3,6 +3,7 @@
     "username": "postgres",
     "password": "secret",
     "database": "soaring_flocks_development",
+    "loggin": true,
     "host": "localhost",
     "dialect": "postgres",
     "operatorsAliases": "0"

@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       inGame: DataTypes.BOOLEAN,
+      allowNull: false,
       img: DataTypes.STRING,
       build: DataTypes.JSON,
       ability: DataTypes.JSON,
