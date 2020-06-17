@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   game.associate = function (models) {
-    // associations can be defined here
+    game.hasMany(models.player);
   };
   return game;
 };
