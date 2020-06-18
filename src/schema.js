@@ -59,7 +59,7 @@ const typeDefs = gql`
   }
 
   type PlayerResource {
-    id: int!
+    id: Int!
     quantity: Int
     playerId: Int
     player: Player
@@ -67,11 +67,9 @@ const typeDefs = gql`
     resource: Resource
   }
 
-  # ----
-
   type Query {
     player(id: Int!): Player
-    # playerInGame(inGame: Boolean!)
+    playerInGame(inGame: Boolean!): Player
     allPlayers: [Player!]!
   }
 
