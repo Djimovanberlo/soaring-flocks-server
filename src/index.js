@@ -2,6 +2,7 @@ const { ApolloServer } = require("apollo-server");
 const typeDefs = require("./schema");
 const resolvers = require("./resolvers");
 const models = require("../models");
+const { PORT } = require("../config/constants");
 
 const server = new ApolloServer({
   typeDefs,
@@ -11,6 +12,4 @@ const server = new ApolloServer({
 
 server
   .listen()
-  .then(({ url }) =>
-    console.log("Server is running on localhost:4000", models)
-  );
+  .then(({ url }) => console.log(`Listening on port: ${PORT}`, models));

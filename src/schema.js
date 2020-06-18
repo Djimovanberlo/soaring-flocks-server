@@ -17,7 +17,8 @@ const typeDefs = gql`
     inGame: Boolean!
     img: String
     ability: String
-    gameId: Game!
+    gameId: Int
+    game: Game
     messages: [Message!]!
     trades: [Trade!]!
     resources: [Resource]!
@@ -26,21 +27,23 @@ const typeDefs = gql`
   type Message {
     id: Int!
     content: String!
-    playerId: Player!
+    playerId: Int!
+    player: Player!
   }
 
   type Trade {
     id: Int!
     closed: Boolean!
-    playerSenderId: Player!
-    playerReceiverId: Player!
-    tradeResource: [TradeResource!]!
+    playerSenderId: Int!
+    playerReceiverId: Int!
+    player: Player!
+    tradeResources: [TradeResource!]!
   }
 
   type Resource {
     id: Int!
     type: String!
-    tradeResource: [TradeResource!]!
+    tradeResources: [TradeResource!]!
     players: [Player!]
   }
 
@@ -49,38 +52,41 @@ const typeDefs = gql`
     quantitySent: Int
     quantityReceived: Int
     tradeId: Trade!
-    resourceSent: Resource
-    resourceReceived: Resource
+    trade: Trade!
+    resourceSent: Int
+    resourceReceived: Int
+    resource: Resource
   }
 
   type PlayerResource {
     id: int!
     quantity: Int
-    playerId: Player
-    resourceId: Resource
+    playerId: Int
+    player: Player
+    resourceId: Int
+    resource: Resource
   }
 
   # ----
 
   type Query {
     player(id: Int!): Player
-    playerInGame(inGame: Boolean!)
+    # playerInGame(inGame: Boolean!)
     allPlayers: [Player!]!
   }
 
   type Mutation {
-    createPlayer(name: String!
-    email: String!
-    password: String!
-    inGame: Boolean!): Player!
+    createPlayer(
+      name: String!
+      email: String!
+      password: String!
+      inGame: Boolean!
+    ): Player!
     # values when start game: inGame=true, img=randomized, gameId=gameId
     # values when leave game: inGame=false, img=null, gameId=null, build=null, ability=null
-    # build / ability when selected
+    # set build / ability when selected
 
-    createMessage(
-      content: String!
-      playerId: Int!
-    ): Message!
+    createMessage(content: String!, playerId: Int!): Message!
   }
 `;
 
