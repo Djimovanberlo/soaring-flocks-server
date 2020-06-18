@@ -3,7 +3,10 @@ module.exports = (sequelize, DataTypes) => {
   const trade = sequelize.define(
     "trade",
     {
-      closed: DataTypes.BOOLEAN,
+      closed: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
     },
     {}
   );

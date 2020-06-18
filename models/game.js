@@ -8,9 +8,18 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
         allowNull: false,
       },
-      gameTime: DataTypes.INTEGER,
-      gameTimePassed: DataTypes.INTEGER,
-      closed: DataTypes.BOOLEAN,
+      gameTime: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      gameTimePassed: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      closed: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
     },
     {}
   );

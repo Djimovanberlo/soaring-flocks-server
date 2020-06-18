@@ -3,7 +3,10 @@ module.exports = (sequelize, DataTypes) => {
   const resource = sequelize.define(
     "resource",
     {
-      type: DataTypes.STRING,
+      type: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
     {}
   );
