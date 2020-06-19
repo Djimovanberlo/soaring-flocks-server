@@ -47,7 +47,7 @@ module.exports = {
           name: "Joep",
           email: "joep@joep.com",
           password: bcrypt.hashSync("q", SALT_ROUNDS),
-          inGame: false,
+          inGame: true,
           img: null,
           build: null,
           ability: null,

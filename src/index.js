@@ -10,4 +10,4 @@ const server = new ApolloServer({
   context: { models },
 });
 
-server.listen().then(({ url }) => console.log(`Listening on port: ${PORT}`));
+server.listen().then(({ url }) => console.log(`🚀 Listening on port: ${url}`));
