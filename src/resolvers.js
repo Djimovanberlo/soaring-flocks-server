@@ -3,15 +3,29 @@ const bcrypt = require("bcryptjs");
 const resolvers = {
   Query: {
     async player(root, { id }, { models }) {
-      return models.player.findById(id);
+      return models.player.findByPk(id);
     },
-    async playerInGame(root, args, { id }, { models }) {
-      return models.player.findAll((player) => player.inGame === args.inGame);
-    },
+    // query playerById {
+    //   player(id: 2) {
+    //     name
+    //   }
+    // }
+
     async allPlayers(root, args, { models }) {
-      return models.player.findAll();
+      const players = await models.player.findAll({
+        where: {
+          inGame: args.inGame,
+        },
+      });
+      return players;
     },
   },
+  // query allPlayers {
+  //   allPlayers(inGame: true) {
+  //     name
+  //     inGame
+  // }
+  // }
   Mutation: {
     async createPlayer(root, { name, email, password, inGame }, { models }) {
       return models.player.create({

@@ -69,8 +69,7 @@ const typeDefs = gql`
 
   type Query {
     player(id: Int!): Player
-    playerInGame(inGame: Boolean!): Player
-    allPlayers: [Player!]!
+    allPlayers(inGame: Boolean): [Player]
   }
 
   type Mutation {
