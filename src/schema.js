@@ -21,7 +21,16 @@ const typeDefs = gql`
     game: Game
     messages: [Message!]!
     trades: [Trade!]!
-    resources: [Resource]!
+    resources: [Resource]
+    playerResources: [PlayerResource]
+  }
+
+  type Resource {
+    id: Int!
+    type: String!
+    tradeResources: [TradeResource!]!
+    # playerResources: [PlayerResource]
+    players: [Player]
   }
 
   type Message {
@@ -40,13 +49,6 @@ const typeDefs = gql`
     tradeResources: [TradeResource!]!
   }
 
-  type Resource {
-    id: Int!
-    type: String!
-    tradeResources: [TradeResource!]!
-    players: [Player!]
-  }
-
   type TradeResource {
     id: Int!
     quantitySent: Int
@@ -62,14 +64,15 @@ const typeDefs = gql`
     id: Int!
     quantity: Int
     playerId: Int
-    player: Player
+    player: [Player]
     resourceId: Int
-    resource: Resource
+    resource: [Resource]
   }
 
   type Query {
     player(id: Int!): Player
-    allPlayers(inGame: Boolean): [Player]
+    allPlayersInGame(inGame: Boolean): [Player]
+    allResources: [Resource]
   }
 
   type Mutation {

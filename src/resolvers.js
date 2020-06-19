@@ -1,31 +1,39 @@
 const bcrypt = require("bcryptjs");
+// import { resource } from "../models/resource";
 
 const resolvers = {
   Query: {
     async player(root, { id }, { models }) {
       return models.player.findByPk(id);
     },
-    // query playerById {
-    //   player(id: 2) {
-    //     name
-    //   }
-    // }
 
-    async allPlayers(root, args, { models }) {
+    async allPlayersInGame(root, args, { models }) {
       const players = await models.player.findAll({
         where: {
           inGame: args.inGame,
         },
+        include: [models.resource],
       });
+
+      console.log("DIE", models.resource);
+      // www
+      console.log(
+        "DEEZ",
+        players.map((player) => {
+          return JSON.stringify(player.resources);
+        })
+      );
       return players;
     },
+
+    async allResources(root, args, { models }) {
+      const test = await models.resource.findAll();
+      const datas = test.map((resource) => resource.dataValues);
+      console.log("data test:", datas);
+      return test;
+    },
   },
-  // query allPlayers {
-  //   allPlayers(inGame: true) {
-  //     name
-  //     inGame
-  // }
-  // }
+
   Mutation: {
     async createPlayer(root, { name, email, password, inGame }, { models }) {
       return models.player.create({
@@ -39,11 +47,13 @@ const resolvers = {
       return models.message.create({ content, playerId });
     },
   },
+
   Game: {
     async players(game) {
       return game.getPlayers();
     },
   },
+
   Player: {
     async game(player) {
       return player.getGame();
@@ -54,17 +64,26 @@ const resolvers = {
     async trades(player) {
       return player.getTrades();
     },
+    async resources(player) {
+      return player.getResources();
+    },
+    async playerResources(player) {
+      return player.getPlayerResources();
+    },
   },
+
   Message: {
     async player(message) {
       return message.getPlayer();
     },
   },
+
   Trade: {
     async tradeResources(trade) {
       return trade.getTradeResources();
     },
   },
+
   Resource: {
     async tradeResources(resource) {
       return resource.getTradeResources();
@@ -72,7 +91,11 @@ const resolvers = {
     async players(resource) {
       return resource.getPlayers();
     },
+    // async playerResources(resource) {
+    //   return resource.getPlayerResources();
+    // },
   },
+
   TradeResource: {
     async trade(tradeResource) {
       return tradeResource.getTrade();
@@ -81,14 +104,15 @@ const resolvers = {
       return tradeResource.getResource();
     },
   },
-  PlayerResource: {
-    async player(playerResource) {
-      return playerResource.getPlayer();
-    },
-    async resource(playerResource) {
-      return playerResource.getResource();
-    },
-  },
+
+  // PlayerResource: {
+  //   async player(playerResource) {
+  //     return playerResource.getPlayer();
+  //   },
+  //   async resource(playerResource) {
+  //     return playerResource.getResource();
+  //   },
+  // },
 };
 
 module.exports = resolvers;
