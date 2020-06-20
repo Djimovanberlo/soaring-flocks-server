@@ -30,6 +30,21 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          type: "mMarket",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          type: "rMarket",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          type: "vMarket",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {}
     );
