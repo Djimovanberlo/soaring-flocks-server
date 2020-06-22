@@ -60,7 +60,7 @@ module.exports = {
 
   down: async (queryInterface, Sequelize) => {
     await queryInterface.removeColumn("players", "gameId");
-    await queryInterface.removeColumn("privateMessages", "playerId");
+    await queryInterface.removeColumn("publicMessages", "playerId");
     await queryInterface.removeColumn("privateMessages", "playerSenderId");
     await queryInterface.removeColumn("privateMessages", "playerReceiverId");
     await queryInterface.removeColumn("trades", "playerSenderId");

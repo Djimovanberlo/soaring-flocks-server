@@ -3,7 +3,7 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert(
-      "messages",
+      "publicMessages",
       [
         {
           content: "Hi do you want to play?",
@@ -29,6 +29,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete("messages", null, {});
+    return queryInterface.bulkDelete("publicMessages", null, {});
   },
 };

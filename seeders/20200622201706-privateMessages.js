@@ -3,27 +3,34 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert(
-      "trades",
+      "privateMessages",
       [
         {
-          closed: false,
+          content: "send msg",
           createdAt: new Date(),
           updatedAt: new Date(),
           playerSenderId: 1,
           playerReceiverId: 2,
         },
         {
-          closed: false,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          playerSenderId: 1,
-          playerReceiverId: 3,
-        },
-        {
-          closed: true,
+          content: "send msg2",
           createdAt: new Date(),
           updatedAt: new Date(),
           playerSenderId: 2,
+          playerReceiverId: 1,
+        },
+        {
+          content: "send msg3",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          playerSenderId: 3,
+          playerReceiverId: 1,
+        },
+        {
+          content: "send msg4",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          playerSenderId: 1,
           playerReceiverId: 3,
         },
       ],
@@ -32,6 +39,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete("trades", null, {});
+    return queryInterface.bulkDelete("privateMessages", null, {});
   },
 };
