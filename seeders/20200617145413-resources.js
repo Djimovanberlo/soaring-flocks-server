@@ -26,7 +26,7 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
-          type: "vPoints",
+          type: "vPoint",
           createdAt: new Date(),
           updatedAt: new Date(),
         },

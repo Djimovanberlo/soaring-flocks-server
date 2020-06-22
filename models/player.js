@@ -23,17 +23,22 @@ module.exports = (sequelize, DataTypes) => {
       img: DataTypes.STRING,
       build: DataTypes.JSON,
       ability: DataTypes.JSON,
+      moneyCash: DataTypes.INTEGER,
+      egg: DataTypes.INTEGER,
+      feather: DataTypes.INTEGER,
+      bug: DataTypes.INTEGER,
+      vPoint: DataTypes.INTEGER,
+      mMarket: DataTypes.INTEGER,
+      rMarket: DataTypes.INTEGER,
+      vMarket: DataTypes.INTEGER,
     },
     {}
   );
   player.associate = function (models) {
     player.belongsTo(models.game);
     player.hasMany(models.trade);
-    player.hasMany(models.message);
-    player.belongsToMany(models.resource, {
-      through: "playerResources",
-      foreignKey: "playerId",
-    });
+    player.hasMany(models.publicMessage);
+    player.hasMany(models.privateMessage);
   };
   return player;
 };

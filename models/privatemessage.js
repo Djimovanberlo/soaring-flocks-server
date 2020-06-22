@@ -1,7 +1,7 @@
 "use strict";
 module.exports = (sequelize, DataTypes) => {
-  const message = sequelize.define(
-    "message",
+  const privateMessage = sequelize.define(
+    "privateMessage",
     {
       content: {
         type: DataTypes.STRING,
@@ -10,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   );
-  message.associate = function (models) {
+  privateMessage.associate = function (models) {
     message.belongsTo(models.player);
   };
-  return message;
+  return privateMessage;
 };
