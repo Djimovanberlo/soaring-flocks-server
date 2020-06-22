@@ -1,36 +1,41 @@
 const bcrypt = require("bcryptjs");
+const { checkForResolveTypeResolver } = require("apollo-server");
+const Resource = require("../models").resource;
+const Player = require("../models").player;
 // import { resource } from "../models/resource";
 
 const resolvers = {
   Query: {
-    async player(root, { id }, { models }) {
-      return models.player.findByPk(id);
+    async playerById(root, { id }, { models }) {
+      const playerFind = await Player.findByPk(id);
+      console.log("this.player:", playerFind);
+      return playerFind;
     },
-
-    async allPlayersInGame(root, args, { models }) {
-      const players = await models.player.findAll({
-        where: {
-          inGame: args.inGame,
-        },
-        include: [models.resource],
-      });
-
-      console.log("DIE", models.resource);
-      // www
-      console.log(
-        "DEEZ",
-        players.map((player) => {
-          return JSON.stringify(player.resources);
-        })
-      );
-      return players;
-    },
-
     async allResources(root, args, { models }) {
       const test = await models.resource.findAll();
       const datas = test.map((resource) => resource.dataValues);
       console.log("data test:", datas);
       return test;
+    },
+    async getPlayersWithResources(root, { id }, { models }) {
+      try {
+        const players = await Player.findAll({
+          include: [Resource],
+          nest: true,
+        });
+        console.log("!!!PLAYERS!!!", players);
+        console.log(
+          "!!!RESOURCES!!!",
+          players.map((player) => {
+            return player.resources.map((resource) => {
+              return resource.dataValues;
+            });
+          })
+        );
+        return players;
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
 
@@ -91,9 +96,9 @@ const resolvers = {
     async players(resource) {
       return resource.getPlayers();
     },
-    // async playerResources(resource) {
-    //   return resource.getPlayerResources();
-    // },
+    async playerResources(resource) {
+      return resource.getPlayerResources();
+    },
   },
 
   TradeResource: {
@@ -105,14 +110,14 @@ const resolvers = {
     },
   },
 
-  // PlayerResource: {
-  //   async player(playerResource) {
-  //     return playerResource.getPlayer();
-  //   },
-  //   async resource(playerResource) {
-  //     return playerResource.getResource();
-  //   },
-  // },
+  PlayerResource: {
+    async player(playerResource) {
+      return playerResource.getPlayer();
+    },
+    async resource(playerResource) {
+      return playerResource.getResource();
+    },
+  },
 };
 
 module.exports = resolvers;

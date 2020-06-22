@@ -29,7 +29,7 @@ const typeDefs = gql`
     id: Int!
     type: String!
     tradeResources: [TradeResource!]!
-    # playerResources: [PlayerResource]
+    playerResources: [PlayerResource]
     players: [Player]
   }
 
@@ -70,9 +70,10 @@ const typeDefs = gql`
   }
 
   type Query {
-    player(id: Int!): Player
+    playerById(id: Int!): Player
     allPlayersInGame(inGame: Boolean): [Player]
     allResources: [Resource]
+    getPlayersWithResources: [Player]
   }
 
   type Mutation {

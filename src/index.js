@@ -2,6 +2,7 @@ const { ApolloServer } = require("apollo-server");
 const typeDefs = require("./schema");
 const resolvers = require("./resolvers");
 const models = require("../models");
+const corsMiddleWare = require("cors");
 const { PORT } = require("../config/constants");
 
 const server = new ApolloServer({
