@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   privateMessage.associate = function (models) {
-    message.belongsTo(models.player);
+    privateMessage.belongsTo(models.player);
   };
   return privateMessage;
 };
