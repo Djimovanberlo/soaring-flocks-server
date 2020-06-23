@@ -9,6 +9,9 @@ const resolvers = {
       console.log("this.player:", playerFind);
       return playerFind;
     },
+    async getAllPublicMessages(root, { content, playerId }, { models }) {
+      return models.publicMessage.findAll();
+    },
   },
 
   Mutation: {
@@ -19,9 +22,6 @@ const resolvers = {
         password: await bcrypt.hash(password, 10),
         inGame,
       });
-    },
-    async createMessage(root, { content, playerId }, { models }) {
-      return models.message.create({ content, playerId });
     },
   },
 
@@ -35,61 +35,60 @@ const resolvers = {
     async game(player) {
       return player.getGame();
     },
-    async messages(player) {
-      return player.getMessages();
+    async publicMessages(player) {
+      return player.getPublicMessages();
+    },
+    async privateMessages(player) {
+      return player.getPrivateMessages();
     },
     async trades(player) {
       return player.getTrades();
     },
-    async resources(player) {
-      return player.getResources();
-    },
-    async playerResources(player) {
-      return player.getPlayerResources();
-    },
-  },
-
-  Message: {
-    async player(message) {
-      return message.getPlayer();
-    },
   },
 
   Trade: {
-    async tradeResources(trade) {
-      return trade.getTradeResources();
+    async PlayerSenderId(trade) {
+      return trade.getPlayerSenderId();
+    },
+    async PlayerReceiverId(trade) {
+      return trade.getPlayerReceiverId();
     },
   },
+  // Message: {
+  //   async player(message) {
+  //     return message.getPlayer();
+  //   },
+  // },
 
-  Resource: {
-    async tradeResources(resource) {
-      return resource.getTradeResources();
-    },
-    async players(resource) {
-      return resource.getPlayers();
-    },
-    async playerResources(resource) {
-      return resource.getPlayerResources();
-    },
-  },
+  // Resource: {
+  //   async tradeResources(resource) {
+  //     return resource.getTradeResources();
+  //   },
+  //   async players(resource) {
+  //     return resource.getPlayers();
+  //   },
+  //   async playerResources(resource) {
+  //     return resource.getPlayerResources();
+  //   },
+  // },
 
-  TradeResource: {
-    async trade(tradeResource) {
-      return tradeResource.getTrade();
-    },
-    async resource(tradeResource) {
-      return tradeResource.getResource();
-    },
-  },
+  // TradeResource: {
+  //   async trade(tradeResource) {
+  //     return tradeResource.getTrade();
+  //   },
+  //   async resource(tradeResource) {
+  //     return tradeResource.getResource();
+  //   },
+  // },
 
-  PlayerResource: {
-    async player(playerResource) {
-      return playerResource.getPlayer();
-    },
-    async resource(playerResource) {
-      return playerResource.getResource();
-    },
-  },
+  // PlayerResource: {
+  //   async player(playerResource) {
+  //     return playerResource.getPlayer();
+  //   },
+  //   async resource(playerResource) {
+  //     return playerResource.getResource();
+  //   },
+  // },
 };
 
 module.exports = resolvers;
