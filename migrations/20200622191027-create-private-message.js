@@ -1,18 +1,15 @@
 "use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable("tradeResources", {
+    return queryInterface.createTable("privateMessages", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      quantitySent: {
-        type: Sequelize.INTEGER,
-      },
-      quantityReceived: {
-        type: Sequelize.INTEGER,
+      content: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
@@ -25,6 +22,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("tradeResources");
+    return queryInterface.dropTable("privateMessages");
   },
 };

@@ -1,8 +1,6 @@
 const bcrypt = require("bcryptjs");
 const { checkForResolveTypeResolver } = require("apollo-server");
-const Resource = require("../models").resource;
 const Player = require("../models").player;
-// import { resource } from "../models/resource";
 
 const resolvers = {
   Query: {
@@ -10,32 +8,6 @@ const resolvers = {
       const playerFind = await Player.findByPk(id);
       console.log("this.player:", playerFind);
       return playerFind;
-    },
-    async allResources(root, args, { models }) {
-      const test = await models.resource.findAll();
-      const datas = test.map((resource) => resource.dataValues);
-      console.log("data test:", datas);
-      return test;
-    },
-    async getPlayersWithResources(root, { id }, { models }) {
-      try {
-        const players = await Player.findAll({
-          include: [Resource],
-          nest: true,
-        });
-        console.log("!!!PLAYERS!!!", players);
-        console.log(
-          "!!!RESOURCES!!!",
-          players.map((player) => {
-            return player.resources.map((resource) => {
-              return resource.dataValues;
-            });
-          })
-        );
-        return players;
-      } catch (e) {
-        console.log(e);
-      }
     },
   },
 

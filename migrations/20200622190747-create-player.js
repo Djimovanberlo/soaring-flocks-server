@@ -9,16 +9,12 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       name: {
-        allowNull: false,
         type: Sequelize.STRING,
       },
       email: {
-        allowNull: false,
-        unique: true,
         type: Sequelize.STRING,
       },
       password: {
-        allowNull: false,
         type: Sequelize.STRING,
       },
       inGame: {
@@ -32,6 +28,30 @@ module.exports = {
       },
       ability: {
         type: Sequelize.JSON,
+      },
+      moneyCash: {
+        type: Sequelize.INTEGER,
+      },
+      egg: {
+        type: Sequelize.INTEGER,
+      },
+      feather: {
+        type: Sequelize.INTEGER,
+      },
+      bug: {
+        type: Sequelize.INTEGER,
+      },
+      vPoint: {
+        type: Sequelize.INTEGER,
+      },
+      mMarket: {
+        type: Sequelize.INTEGER,
+      },
+      rMarket: {
+        type: Sequelize.INTEGER,
+      },
+      vMarket: {
+        type: Sequelize.INTEGER,
       },
       createdAt: {
         allowNull: false,
