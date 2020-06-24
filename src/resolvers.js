@@ -19,7 +19,34 @@ const resolvers = {
     async getAllPlayersGameState(root, { inGame }, { models }) {
       console.log(models.playerinGame);
       return models.player.findAll({
-        where: { inGame: inGame },
+        where: { inGame },
+      });
+    },
+
+    async getPrivateMessagesById(
+      root,
+      { playerSenderId, playerReceiverId },
+      { models }
+    ) {
+      console.log(models.privateMessage);
+      return models.privateMessage.findAll({
+        where: {
+          playerSenderId: playerSenderId,
+          playerReceiverId: playerReceiverId,
+        },
+      });
+    },
+
+    async getTradesById(
+      root,
+      { playerSenderId, playerReceiverId },
+      { models }
+    ) {
+      return models.trade.findAll({
+        where: {
+          playerSenderId,
+          playerReceiverId,
+        },
       });
     },
   },
@@ -32,6 +59,9 @@ const resolvers = {
         password: await bcrypt.hash(password, 10),
         inGame,
       });
+    },
+    async addBuild(root, { id, build }, { models }) {
+      return models.player.findByPk(id);
     },
   },
 
@@ -64,16 +94,31 @@ const resolvers = {
 
   Trade: {
     async playerSenderId(trade) {
-      return trade.getPlayerSenderId();
+      return trade.getPlayerSender();
     },
     async playerReceiverId(trade) {
-      return trade.getPlayerReceiverId();
+      return trade.getPlayerReceiver();
     },
+    // async playerSenderId(trade) {
+    //   return trade.getPlayer();
+    // },
+    // async playerReceiverId(trade) {
+    //   return trade.getPlayer();
+    // },
   },
 
   PublicMessage: {
     async playerId(publicMessage) {
       return publicMessage.getPlayer();
+    },
+  },
+
+  PrivateMessage: {
+    async playerSenderId(privateMessage) {
+      return privateMessage.getPlayer();
+    },
+    async playerReceiverId(privateMessage) {
+      return privateMessage.getPlayer();
     },
   },
 };

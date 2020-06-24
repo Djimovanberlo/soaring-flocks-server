@@ -71,11 +71,12 @@ const typeDefs = gql`
     getPlayerById(id: Int): Player
     getAllPlayersGameState(inGame: Boolean): [Player]
     getAllPublicMessages: [PublicMessage]
+    getPrivateMessagesById(
+      playerSenderId: Int
+      playerReceiverId: Int
+    ): [PrivateMessage]
+    getTradesById(playerSenderId: Int, playerReceiverId: Int): [Trade]
     getGameById(id: Int): Game
-  }
-
-  type Subscription {
-    getAllPublicMessages: [PublicMessage]
   }
 
   type Mutation {
@@ -89,7 +90,14 @@ const typeDefs = gql`
     # values when leave game: inGame=false, img=null, gameId=null, build=null, ability=null
     # set build / ability when selected
 
-    createPublicMessage(content: String!, playerId: Int!): PublicMessage!
+    addBuild(id: Int, build: String): Player
+    addAbility(id: Int, ability: String): Player
+
+    # createPublicMessage(content: String!, playerId: Int!): PublicMessage!
+  }
+
+  type Subscription {
+    getAllPublicMessages: [PublicMessage]
   }
   # type Resource {
   #   id: Int!
