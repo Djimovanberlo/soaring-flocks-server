@@ -9,9 +9,7 @@ const resolvers = {
     },
 
     async playerById(root, { id }, { models }) {
-      const playerFind = await Player.findByPk(id);
-      console.log("this.player:", playerFind);
-      return playerFind;
+      return models.player.findByPk(id);
     },
   },
 
