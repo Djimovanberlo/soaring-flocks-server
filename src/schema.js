@@ -62,7 +62,7 @@ const typeDefs = gql`
     bugReceiver: Int
     vPointSender: Int
     vPointReceiver: Int
-    Closed: Boolean
+    closed: Boolean
     playerSenderId: Player
     playerReceiverId: Player
   }
@@ -75,7 +75,11 @@ const typeDefs = gql`
       playerSenderId: Int
       playerReceiverId: Int
     ): [PrivateMessage]
-    getTradesById(playerSenderId: Int, playerReceiverId: Int): [Trade]
+    getTradesById(
+      playerSenderId: Int
+      playerReceiverId: Int
+      closed: Boolean
+    ): [Trade]
     getGameById(id: Int): Game
   }
 
@@ -86,6 +90,8 @@ const typeDefs = gql`
       password: String!
       inGame: Boolean!
     ): Player!
+
+    closeTrade(id: Int, closed: Boolean): Trade
     # values when start game: inGame=true, img=randomized, gameId=gameId
     # values when leave game: inGame=false, img=null, gameId=null, build=null, ability=null
     # set build / ability when selected

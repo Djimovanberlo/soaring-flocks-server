@@ -45,6 +45,7 @@ const resolvers = {
         where: {
           playerSenderId,
           playerReceiverId,
+          // closed: false,
         },
       });
     },
@@ -61,6 +62,11 @@ const resolvers = {
     },
     async addBuild(root, { id, build }, { models }) {
       return models.player.findByPk(id);
+    },
+    async closeTrade(root, { id, closed }, { models }) {
+      const trade = await models.trade.findByPk(id);
+      console.log("OH HALLO", trade);
+      await trade.update({ closed });
     },
   },
 
