@@ -68,6 +68,44 @@ const resolvers = {
       console.log("OH HALLO", trade);
       await trade.update({ closed });
     },
+    async suggestTrade(
+      root,
+      {
+        playerSenderId,
+        playerReceiverId,
+        moneyCashSender,
+        moneyCashReceiver,
+        eggSender,
+        eggReceiver,
+        featherSender,
+        featherReceiver,
+        bugSender,
+        bugReceiver,
+        closed,
+      },
+      { models }
+    ) {
+      const existingTrade = await models.trade.findOne({
+        where: { playerSenderId, playerReceiverId },
+      });
+      if (existingTrade) {
+        console.log("ALREADY EXISTBOY");
+      } else {
+        await models.trade.create({
+          playerSenderId,
+          playerReceiverId,
+          moneyCashSender,
+          moneyCashReceiver,
+          eggSender,
+          eggReceiver,
+          featherSender,
+          featherReceiver,
+          bugSender,
+          bugReceiver,
+          closed: false,
+        });
+      }
+    },
   },
 
   Subscription: {

@@ -92,6 +92,20 @@ const typeDefs = gql`
     ): Player!
 
     closeTrade(id: Int, closed: Boolean): Trade
+
+    suggestTrade(
+      playerSenderId: Int
+      playerReceiverId: Int
+      moneyCashSender: Int
+      moneyCashReceiver: Int
+      eggSender: Int
+      eggReceiver: Int
+      featherSender: Int
+      featherReceiver: Int
+      bugSender: Int
+      bugReceiver: Int
+      closed: Boolean
+    ): Trade
     # values when start game: inGame=true, img=randomized, gameId=gameId
     # values when leave game: inGame=false, img=null, gameId=null, build=null, ability=null
     # set build / ability when selected
