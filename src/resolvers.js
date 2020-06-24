@@ -8,8 +8,12 @@ const resolvers = {
       return models.publicMessage.findAll();
     },
 
-    async playerById(root, { id }, { models }) {
+    async getPlayerById(root, { id }, { models }) {
       return models.player.findByPk(id);
+    },
+
+    async getGameById(root, { id }, { models }) {
+      return models.game.findByPk(id);
     },
   },
 
