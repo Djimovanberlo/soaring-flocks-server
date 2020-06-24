@@ -36,9 +36,27 @@ module.exports = (sequelize, DataTypes) => {
   );
   player.associate = function (models) {
     player.belongsTo(models.game);
-    player.hasMany(models.trade);
     player.hasMany(models.publicMessage);
-    player.hasMany(models.privateMessage);
+    player.belongsToMany(models.player, {
+      through: "trades",
+      as: "playerSender",
+      foreignKey: "playerSenderId",
+    });
+    player.belongsToMany(models.player, {
+      through: "trades",
+      as: "playerReceiver",
+      foreignKey: "playerReceiverId",
+    });
+    player.belongsToMany(models.privateMessage, {
+      through: "privateMessages",
+      as: "playerMsgSender",
+      foreignKey: "playerSenderId",
+    });
+    player.belongsToMany(models.privateMessage, {
+      through: "privateMessages",
+      as: "playerMsgReceiver",
+      foreignKey: "playerReceiverId",
+    });
   };
   return player;
 };

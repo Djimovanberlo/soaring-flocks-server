@@ -21,7 +21,12 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   trade.associate = function (models) {
-    trade.belongsTo(models.player);
+    trade.belongsTo(models.player, {
+      as: "playerSender",
+    });
+    trade.belongsTo(models.player, {
+      as: "playerReceiver",
+    });
   };
   return trade;
 };

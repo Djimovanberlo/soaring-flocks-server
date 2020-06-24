@@ -4,10 +4,49 @@ const Player = require("../models").player;
 
 const resolvers = {
   Query: {
-    async playerById(root, { id }, { models }) {
-      const playerFind = await Player.findByPk(id);
-      console.log("this.player:", playerFind);
-      return playerFind;
+    async getAllPublicMessages(root, { content, playerId }, { models }) {
+      return models.publicMessage.findAll();
+    },
+
+    async getPlayerById(root, { id }, { models }) {
+      return models.player.findByPk(id);
+    },
+
+    async getGameById(root, { id }, { models }) {
+      return models.game.findByPk(id);
+    },
+
+    async getAllPlayersGameState(root, { inGame }, { models }) {
+      console.log(models.playerinGame);
+      return models.player.findAll({
+        where: { inGame },
+      });
+    },
+
+    async getPrivateMessagesById(
+      root,
+      { playerSenderId, playerReceiverId },
+      { models }
+    ) {
+      return models.privateMessage.findAll({
+        where: {
+          playerSenderId,
+          playerReceiverId,
+        },
+      });
+    },
+
+    async getTradesById(
+      root,
+      { playerSenderId, playerReceiverId },
+      { models }
+    ) {
+      return models.trade.findAll({
+        where: {
+          playerSenderId,
+          playerReceiverId,
+        },
+      });
     },
   },
 
@@ -20,8 +59,14 @@ const resolvers = {
         inGame,
       });
     },
-    async createMessage(root, { content, playerId }, { models }) {
-      return models.message.create({ content, playerId });
+    async addBuild(root, { id, build }, { models }) {
+      return models.player.findByPk(id);
+    },
+  },
+
+  Subscription: {
+    async getAllPublicMessages(root, { content, playerId }, { models }) {
+      return models.publicMessage.findAll();
     },
   },
 
@@ -35,59 +80,44 @@ const resolvers = {
     async game(player) {
       return player.getGame();
     },
-    async messages(player) {
-      return player.getMessages();
+    async publicMessages(player) {
+      return player.getPublicMessages();
+    },
+    async privateMessages(player) {
+      return player.getPrivateMessages();
     },
     async trades(player) {
       return player.getTrades();
     },
-    async resources(player) {
-      return player.getResources();
-    },
-    async playerResources(player) {
-      return player.getPlayerResources();
-    },
-  },
-
-  Message: {
-    async player(message) {
-      return message.getPlayer();
-    },
   },
 
   Trade: {
-    async tradeResources(trade) {
-      return trade.getTradeResources();
+    async playerSenderId(trade) {
+      return trade.getPlayerSender();
+    },
+    async playerReceiverId(trade) {
+      return trade.getPlayerReceiver();
+    },
+    // async playerSenderId(trade) {
+    //   return trade.getPlayer();
+    // },
+    // async playerReceiverId(trade) {
+    //   return trade.getPlayer();
+    // },
+  },
+
+  PublicMessage: {
+    async playerId(publicMessage) {
+      return publicMessage.getPlayer();
     },
   },
 
-  Resource: {
-    async tradeResources(resource) {
-      return resource.getTradeResources();
+  PrivateMessage: {
+    async playerSenderId(privateMessage) {
+      return privateMessage.getPlayerSender();
     },
-    async players(resource) {
-      return resource.getPlayers();
-    },
-    async playerResources(resource) {
-      return resource.getPlayerResources();
-    },
-  },
-
-  TradeResource: {
-    async trade(tradeResource) {
-      return tradeResource.getTrade();
-    },
-    async resource(tradeResource) {
-      return tradeResource.getResource();
-    },
-  },
-
-  PlayerResource: {
-    async player(playerResource) {
-      return playerResource.getPlayer();
-    },
-    async resource(playerResource) {
-      return playerResource.getResource();
+    async playerReceiverId(privateMessage) {
+      return privateMessage.getPlayerReceiver();
     },
   },
 };

@@ -16,64 +16,67 @@ const typeDefs = gql`
     email: String!
     inGame: Boolean!
     img: String
+    build: String
     ability: String
+    moneyCash: Int
+    egg: Int
+    feather: Int
+    bug: Int
+    vPoint: Int
+    mMarket: Int
+    rMarket: Int
+    vMarket: Int
     gameId: Int
     game: Game
-    messages: [Message!]!
+    publicMessages: [PublicMessage]
+    privateMessages: [PrivateMessage]
     trades: [Trade!]!
-    resources: [Resource]
-    playerResources: [PlayerResource]
   }
 
-  type Resource {
+  type PrivateMessage {
     id: Int!
-    type: String!
-    tradeResources: [TradeResource!]!
-    playerResources: [PlayerResource]
-    players: [Player]
+    content: String
+    createdAt: String
+    updatedAt: String
+    playerSenderId: Player
+    playerReceiverId: Player
   }
 
-  type Message {
+  type PublicMessage {
     id: Int!
-    content: String!
-    playerId: Int!
-    player: Player!
+    content: String
+    createdAt: String
+    updatedAt: String
+    playerId: Player
   }
 
   type Trade {
     id: Int!
-    closed: Boolean!
-    playerSenderId: Int!
-    playerReceiverId: Int!
-    player: Player!
-    tradeResources: [TradeResource!]!
-  }
-
-  type TradeResource {
-    id: Int!
-    quantitySent: Int
-    quantityReceived: Int
-    tradeId: Trade!
-    trade: Trade!
-    resourceSent: Int
-    resourceReceived: Int
-    resource: Resource
-  }
-
-  type PlayerResource {
-    id: Int!
-    quantity: Int
-    playerId: Int
-    player: [Player]
-    resourceId: Int
-    resource: [Resource]
+    moneyCashSender: Int
+    moneyCashReceiver: Int
+    eggSender: Int
+    eggReceiver: Int
+    featherSender: Int
+    featherReceiver: Int
+    bugSender: Int
+    bugReceiver: Int
+    vPointSender: Int
+    vPointReceiver: Int
+    Closed: Boolean
+    playerSenderId: Player
+    playerReceiverId: Player
   }
 
   type Query {
-    playerById(id: Int!): Player
-    allPlayersInGame(inGame: Boolean): [Player]
-    allResources: [Resource]
-    getPlayersWithResources: [Player]
+    getPlayerById(id: Int): Player
+    getAllPlayersGameState(inGame: Boolean): [Player]
+    getAllPublicMessages: [PublicMessage]
+    getPrivateMessagesById(
+      playerSenderId: Int
+      playerReceiverId: Int
+    ): [PrivateMessage]
+    getTradesById(playerSenderId: Int, playerReceiverId: Int): [Trade]
+    getGameById(id: Int): Game
   }
 
   type Mutation {
@@ -87,8 +90,58 @@ const typeDefs = gql`
     # values when leave game: inGame=false, img=null, gameId=null, build=null, ability=null
     # set build / ability when selected
 
-    createMessage(content: String!, playerId: Int!): Message!
+    addBuild(id: Int, build: String): Player
+    addAbility(id: Int, ability: String): Player
+
+    # createPublicMessage(content: String!, playerId: Int!): PublicMessage!
   }
+
+  type Subscription {
+    getAllPublicMessages: [PublicMessage]
+  }
+  # type Resource {
+  #   id: Int!
+  #   type: String!
+  #   tradeResources: [TradeResource!]!
+  #   playerResources: [PlayerResource]
+  #   players: [Player]
+  # }
+
+  # type Message {
+  #   id: Int!
+  #   content: String!
+  #   playerId: Int!
+  #   player: Player!
+  # }
+
+  # type Trade {
+  #   id: Int!
+  #   closed: Boolean!
+  #   playerSenderId: Int!
+  #   playerReceiverId: Int!
+  #   player: Player!
+  #   tradeResources: [TradeResource!]!
+  # }
+
+  # type TradeResource {
+  #   id: Int!
+  #   quantitySent: Int
+  #   quantityReceived: Int
+  #   tradeId: Trade!
+  #   trade: Trade!
+  #   resourceSent: Int
+  #   resourceReceived: Int
+  #   resource: Resource
+  # }
+
+  # type PlayerResource {
+  #   id: Int!
+  #   quantity: Int
+  #   playerId: Int
+  #   player: [Player]
+  #   resourceId: Int
+  #   resource: [Resource]
+  # }
 `;
 
 module.exports = typeDefs;
