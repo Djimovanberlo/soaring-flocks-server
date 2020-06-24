@@ -4,13 +4,14 @@ const Player = require("../models").player;
 
 const resolvers = {
   Query: {
+    async getAllPublicMessages(root, { content, playerId }, { models }) {
+      return models.publicMessage.findAll();
+    },
+
     async playerById(root, { id }, { models }) {
       const playerFind = await Player.findByPk(id);
       console.log("this.player:", playerFind);
       return playerFind;
-    },
-    async getAllPublicMessages(root, { content, playerId }, { models }) {
-      return models.publicMessage.findAll();
     },
   },
 
@@ -22,6 +23,12 @@ const resolvers = {
         password: await bcrypt.hash(password, 10),
         inGame,
       });
+    },
+  },
+
+  Subscription: {
+    async getAllPublicMessages(root, { content, playerId }, { models }) {
+      return models.publicMessage.findAll();
     },
   },
 
@@ -47,48 +54,19 @@ const resolvers = {
   },
 
   Trade: {
-    async PlayerSenderId(trade) {
+    async playerSenderId(trade) {
       return trade.getPlayerSenderId();
     },
-    async PlayerReceiverId(trade) {
+    async playerReceiverId(trade) {
       return trade.getPlayerReceiverId();
     },
   },
-  // Message: {
-  //   async player(message) {
-  //     return message.getPlayer();
-  //   },
-  // },
 
-  // Resource: {
-  //   async tradeResources(resource) {
-  //     return resource.getTradeResources();
-  //   },
-  //   async players(resource) {
-  //     return resource.getPlayers();
-  //   },
-  //   async playerResources(resource) {
-  //     return resource.getPlayerResources();
-  //   },
-  // },
-
-  // TradeResource: {
-  //   async trade(tradeResource) {
-  //     return tradeResource.getTrade();
-  //   },
-  //   async resource(tradeResource) {
-  //     return tradeResource.getResource();
-  //   },
-  // },
-
-  // PlayerResource: {
-  //   async player(playerResource) {
-  //     return playerResource.getPlayer();
-  //   },
-  //   async resource(playerResource) {
-  //     return playerResource.getResource();
-  //   },
-  // },
+  PublicMessage: {
+    async playerId(publicMessage) {
+      return publicMessage.getPlayer();
+    },
+  },
 };
 
 module.exports = resolvers;

@@ -63,10 +63,33 @@ const typeDefs = gql`
     vPointSender: Int
     vPointReceiver: Int
     Closed: Boolean
-    PlayerSenderId: Player
-    PlayerReceiverId: Player
+    playerSenderId: Player
+    playerReceiverId: Player
   }
 
+  type Query {
+    playerById(id: Int): Player
+    allPlayersInGame(inGame: Boolean): [Player]
+    getAllPublicMessages: [PublicMessage]
+  }
+
+  type Subscription {
+    getAllPublicMessages: [PublicMessage]
+  }
+
+  type Mutation {
+    createPlayer(
+      name: String!
+      email: String!
+      password: String!
+      inGame: Boolean!
+    ): Player!
+    # values when start game: inGame=true, img=randomized, gameId=gameId
+    # values when leave game: inGame=false, img=null, gameId=null, build=null, ability=null
+    # set build / ability when selected
+
+    createPublicMessage(content: String!, playerId: Int!): PublicMessage!
+  }
   # type Resource {
   #   id: Int!
   #   type: String!
@@ -110,26 +133,6 @@ const typeDefs = gql`
   #   resourceId: Int
   #   resource: [Resource]
   # }
-
-  type Query {
-    playerById(id: Int): Player
-    allPlayersInGame(inGame: Boolean): [Player]
-    getAllPublicMessages: [PublicMessage]
-  }
-
-  type Mutation {
-    createPlayer(
-      name: String!
-      email: String!
-      password: String!
-      inGame: Boolean!
-    ): Player!
-    # values when start game: inGame=true, img=randomized, gameId=gameId
-    # values when leave game: inGame=false, img=null, gameId=null, build=null, ability=null
-    # set build / ability when selected
-
-    createPublicMessage(content: String!, playerId: Int!): PublicMessage!
-  }
 `;
 
 module.exports = typeDefs;
