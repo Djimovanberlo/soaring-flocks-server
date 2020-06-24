@@ -28,11 +28,10 @@ const resolvers = {
       { playerSenderId, playerReceiverId },
       { models }
     ) {
-      console.log(models.privateMessage);
       return models.privateMessage.findAll({
         where: {
-          playerSenderId: playerSenderId,
-          playerReceiverId: playerReceiverId,
+          playerSenderId,
+          playerReceiverId,
         },
       });
     },
@@ -115,10 +114,10 @@ const resolvers = {
 
   PrivateMessage: {
     async playerSenderId(privateMessage) {
-      return privateMessage.getPlayer();
+      return privateMessage.getPlayerSender();
     },
     async playerReceiverId(privateMessage) {
-      return privateMessage.getPlayer();
+      return privateMessage.getPlayerReceiver();
     },
   },
 };

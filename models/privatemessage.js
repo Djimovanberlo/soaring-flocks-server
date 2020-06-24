@@ -11,7 +11,19 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   privateMessage.associate = function (models) {
-    privateMessage.belongsTo(models.player);
+    privateMessage.belongsTo(models.player, {
+      as: "playerSender",
+    });
+    privateMessage.belongsTo(models.player, {
+      as: "playerReceiver",
+    });
   };
   return privateMessage;
 };
+
+// trade.belongsTo(models.player, {
+//   as: "playerSender",
+// });
+// trade.belongsTo(models.player, {
+//   as: "playerReceiver",
+// });
