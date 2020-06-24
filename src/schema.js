@@ -69,7 +69,7 @@ const typeDefs = gql`
 
   type Query {
     getPlayerById(id: Int): Player
-    allPlayersInGame(inGame: Boolean): [Player]
+    getAllPlayersGameState(inGame: Boolean): [Player]
     getAllPublicMessages: [PublicMessage]
     getGameById(id: Int): Game
   }

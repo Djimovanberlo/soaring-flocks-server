@@ -15,6 +15,13 @@ const resolvers = {
     async getGameById(root, { id }, { models }) {
       return models.game.findByPk(id);
     },
+
+    async getAllPlayersGameState(root, { inGame }, { models }) {
+      console.log(models.playerinGame);
+      return models.player.findAll({
+        where: { inGame: inGame },
+      });
+    },
   },
 
   Mutation: {
