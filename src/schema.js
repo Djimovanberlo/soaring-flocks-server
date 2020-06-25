@@ -11,10 +11,10 @@ const typeDefs = gql`
   }
 
   type Player {
-    id: Int!
-    name: String!
-    email: String!
-    inGame: Boolean!
+    id: Int
+    name: String
+    email: String
+    inGame: Boolean
     img: String
     build: String
     ability: String
@@ -31,7 +31,7 @@ const typeDefs = gql`
     game: Game
     publicMessages: [PublicMessage]
     privateMessages: [PrivateMessage]
-    trades: [Trade!]!
+    trades: [Trade]
   }
 
   type PrivateMessage {
@@ -90,12 +90,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    createPlayer(
-      name: String!
-      email: String!
-      password: String!
-      inGame: Boolean!
-    ): Player!
+    createPlayer(name: String, email: String, password: String): Player!
 
     createPublicMessage(playerId: Int, content: String): PublicMessage
 
