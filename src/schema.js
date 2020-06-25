@@ -96,6 +96,8 @@ const typeDefs = gql`
 
     closeTrade(id: Int, closed: Boolean): Trade
 
+    createAttack(playerId: Int, ability: String): Player
+
     acceptTrade(
       id: Int
       playerSenderId: Int

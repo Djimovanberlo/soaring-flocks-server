@@ -65,6 +65,42 @@ const resolvers = {
       });
     },
 
+    async createAttack(root, { playerId, ability }, { models }) {
+      const attacker = await models.player.findByPk(playerId);
+      const victim = await models.player.findOne({
+        where: { name: ability },
+      });
+      function getRandomInt(max) {
+        return Math.floor(Math.random() * Math.floor(max));
+      }
+      const resource = getRandomInt(5);
+      console.log("HELAAS", victim, "DADER", attacker, "DOEI", resource);
+      await attacker.update({
+        moneyCash: attacker.moneyCash - 1,
+      });
+      if (resource === 0) {
+        await victim.update({
+          moneyCash: victim.moneyCash - 1,
+        });
+      } else if (resource === 1) {
+        await victim.update({
+          egg: victim.egg - 1,
+        });
+      } else if (resource === 2) {
+        await victim.update({
+          feather: victim.feather - 1,
+        });
+      } else if (resource === 3) {
+        await victim.update({
+          bug: victim.bug - 1,
+        });
+      } else if (resource === 1) {
+        await victim.update({
+          vPoint: victim.vPoint - 1,
+        });
+      }
+    },
+
     async createPublicMessage(root, { playerId, content }, { models }) {
       await models.publicMessage.create({
         playerId,
