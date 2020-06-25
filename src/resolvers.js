@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const { checkForResolveTypeResolver } = require("apollo-server");
+const { Connection } = require("pg");
 const Player = require("../models").player;
 
 const resolvers = {
@@ -41,12 +42,16 @@ const resolvers = {
       { playerSenderId, playerReceiverId },
       { models }
     ) {
-      return models.trade.findAll({
-        where: {
-          playerSenderId,
-          playerReceiverId,
-        },
-      });
+      try {
+        return models.trade.findOne({
+          where: {
+            playerSenderId,
+            playerReceiverId,
+          },
+        });
+      } catch (e) {
+        return e;
+      }
     },
   },
 
@@ -59,8 +64,128 @@ const resolvers = {
         inGame,
       });
     },
+
+    async createPublicMessage(root, { playerId, content }, { models }) {
+      await models.publicMessage.create({
+        playerId,
+        content,
+      });
+    },
+
+    async suggestTrade(
+      root,
+      {
+        playerSenderId,
+        playerReceiverId,
+        moneyCashSender,
+        moneyCashReceiver,
+        eggSender,
+        eggReceiver,
+        featherSender,
+        featherReceiver,
+        bugSender,
+        bugReceiver,
+      },
+      { models }
+    ) {
+      const existingTrade = await models.trade.findOne({
+        where: { playerSenderId, playerReceiverId },
+      });
+      // if (existingTrade) {
+      //   console.log("ALREADY EXISTBOY");
+      // } else {
+      await models.trade.create({
+        playerSenderId,
+        playerReceiverId,
+        moneyCashSender,
+        moneyCashReceiver,
+        eggSender,
+        eggReceiver,
+        featherSender,
+        featherReceiver,
+        bugSender,
+        bugReceiver,
+        closed: false,
+      });
+      // }
+    },
+
     async addBuild(root, { id, build }, { models }) {
       return models.player.findByPk(id);
+    },
+    async closeTrade(root, { id, closed }, { models }) {
+      const trade = await models.trade.findByPk(id);
+      console.log("OH HALLO", trade);
+      await trade.update({ closed });
+    },
+
+    async acceptTrade(
+      root,
+      {
+        id,
+        playerSenderId,
+        playerReceiverId,
+        moneyCashSender,
+        moneyCashReceiver,
+        eggSender,
+        eggReceiver,
+        featherSender,
+        featherReceiver,
+        bugSender,
+        bugReceiver,
+      },
+      { models }
+    ) {
+      console.log(
+        "LEES DEES",
+        id,
+        playerSenderId,
+        playerReceiverId,
+        moneyCashSender,
+        moneyCashReceiver,
+        eggSender,
+        eggReceiver,
+        featherSender,
+        featherReceiver,
+        bugSender,
+        bugReceiver
+      );
+      const playerSender = await models.player.findOne({
+        where: {
+          id: playerSenderId,
+        },
+      });
+      console.log("PLAYERSENDER", playerSender);
+      const playerReceiver = await models.player.findOne({
+        where: {
+          id: playerReceiverId,
+        },
+      });
+      console.log("playerReceiver", playerReceiver);
+      const trade = await models.trade.findOne({
+        where: {
+          id,
+        },
+      });
+      console.log("trade", trade);
+      await playerSender.update({
+        moneyCash:
+          playerSender.moneyCash + (moneyCashReceiver - moneyCashSender),
+        egg: playerSender.egg + (eggReceiver - eggSender),
+        feather: playerSender.feather + (featherReceiver - featherSender),
+        bug: playerSender.bug + (bugReceiver - bugSender),
+      });
+      await playerReceiver.update({
+        moneyCash:
+          playerReceiver.moneyCash + (moneyCashSender - moneyCashReceiver),
+        egg: playerReceiver.egg + (eggSender - eggReceiver),
+        feather: playerSender.feather + (featherSender - featherReceiver),
+        bug: playerReceiver.bug + (bugSender - bugReceiver),
+      });
+      await trade.update({
+        closed: true,
+      });
+      console.log("LAS DAS", playerSender, playerReceiver, trade);
     },
   },
 

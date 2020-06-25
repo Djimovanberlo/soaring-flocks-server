@@ -18,6 +18,7 @@ const typeDefs = gql`
     img: String
     build: String
     ability: String
+    abilityParam: String
     moneyCash: Int
     egg: Int
     feather: Int
@@ -51,7 +52,7 @@ const typeDefs = gql`
   }
 
   type Trade {
-    id: Int!
+    id: Int
     moneyCashSender: Int
     moneyCashReceiver: Int
     eggSender: Int
@@ -62,20 +63,29 @@ const typeDefs = gql`
     bugReceiver: Int
     vPointSender: Int
     vPointReceiver: Int
-    Closed: Boolean
+    closed: Boolean
     playerSenderId: Player
     playerReceiverId: Player
   }
 
   type Query {
     getPlayerById(id: Int): Player
+
     getAllPlayersGameState(inGame: Boolean): [Player]
+
     getAllPublicMessages: [PublicMessage]
+
     getPrivateMessagesById(
       playerSenderId: Int
       playerReceiverId: Int
     ): [PrivateMessage]
-    getTradesById(playerSenderId: Int, playerReceiverId: Int): [Trade]
+
+    getTradesById(
+      playerSenderId: Int
+      playerReceiverId: Int
+      closed: Boolean
+    ): Trade
+
     getGameById(id: Int): Game
   }
 
@@ -86,6 +96,38 @@ const typeDefs = gql`
       password: String!
       inGame: Boolean!
     ): Player!
+
+    createPublicMessage(playerId: Int, content: String): PublicMessage
+
+    closeTrade(id: Int, closed: Boolean): Trade
+
+    acceptTrade(
+      id: Int
+      playerSenderId: Int
+      playerReceiverId: Int
+      moneyCashSender: Int
+      moneyCashReceiver: Int
+      eggSender: Int
+      eggReceiver: Int
+      featherSender: Int
+      featherReceiver: Int
+      bugSender: Int
+      bugReceiver: Int
+    ): Trade
+
+    suggestTrade(
+      id: Int
+      playerSenderId: Int
+      playerReceiverId: Int
+      moneyCashSender: Int
+      moneyCashReceiver: Int
+      eggSender: Int
+      eggReceiver: Int
+      featherSender: Int
+      featherReceiver: Int
+      bugSender: Int
+      bugReceiver: Int
+    ): Trade
     # values when start game: inGame=true, img=randomized, gameId=gameId
     # values when leave game: inGame=false, img=null, gameId=null, build=null, ability=null
     # set build / ability when selected

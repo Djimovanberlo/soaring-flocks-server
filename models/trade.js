@@ -13,10 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       bugReceiver: DataTypes.INTEGER,
       vPointSender: DataTypes.INTEGER,
       vPointReceiver: DataTypes.INTEGER,
-      closed: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-      },
+      closed: DataTypes.BOOLEAN,
     },
     {}
   );
