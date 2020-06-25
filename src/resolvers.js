@@ -45,7 +45,7 @@ const resolvers = {
         where: {
           playerSenderId,
           playerReceiverId,
-          // closed: false,
+          closed: false,
         },
       });
     },
@@ -60,14 +60,14 @@ const resolvers = {
         inGame,
       });
     },
-    async addBuild(root, { id, build }, { models }) {
-      return models.player.findByPk(id);
+
+    async createPublicMessage(root, { playerId, content }, { models }) {
+      await models.publicMessage.create({
+        playerId,
+        content,
+      });
     },
-    async closeTrade(root, { id, closed }, { models }) {
-      const trade = await models.trade.findByPk(id);
-      console.log("OH HALLO", trade);
-      await trade.update({ closed });
-    },
+
     async suggestTrade(
       root,
       {
@@ -81,30 +81,87 @@ const resolvers = {
         featherReceiver,
         bugSender,
         bugReceiver,
-        closed,
       },
       { models }
     ) {
       const existingTrade = await models.trade.findOne({
         where: { playerSenderId, playerReceiverId },
       });
-      if (existingTrade) {
-        console.log("ALREADY EXISTBOY");
-      } else {
-        await models.trade.create({
-          playerSenderId,
-          playerReceiverId,
-          moneyCashSender,
-          moneyCashReceiver,
-          eggSender,
-          eggReceiver,
-          featherSender,
-          featherReceiver,
-          bugSender,
-          bugReceiver,
-          closed: false,
-        });
-      }
+      // if (existingTrade) {
+      //   console.log("ALREADY EXISTBOY");
+      // } else {
+      await models.trade.create({
+        playerSenderId,
+        playerReceiverId,
+        moneyCashSender,
+        moneyCashReceiver,
+        eggSender,
+        eggReceiver,
+        featherSender,
+        featherReceiver,
+        bugSender,
+        bugReceiver,
+        closed: false,
+      });
+      // }
+    },
+
+    async addBuild(root, { id, build }, { models }) {
+      return models.player.findByPk(id);
+    },
+    async closeTrade(root, { id, closed }, { models }) {
+      const trade = await models.trade.findByPk(id);
+      console.log("OH HALLO", trade);
+      await trade.update({ closed });
+    },
+
+    async acceptTrade(
+      root,
+      {
+        id,
+        playerSenderId,
+        playerReceiverId,
+        moneyCashSender,
+        moneyCashReceiver,
+        eggSender,
+        eggReceiver,
+        featherSender,
+        featherReceiver,
+        bugSender,
+        bugReceiver,
+      },
+      { models }
+    ) {
+      const playerSender = await models.player.findOne({
+        where: {
+          id: playerSenderId,
+        },
+      });
+      const playerReceiver = await models.player.findOne({
+        where: {
+          id: playerReceiverId,
+        },
+      });
+      const trade = await models.trade.findOne({
+        where: {
+          id,
+        },
+      });
+      await playerSender.update({
+        moneyCash: moneyCash + (moneyCashReceiver - moneyCashSender),
+        egg: egg + (eggReceiver - eggSender),
+        feather: feather + (featherReceiver - featherSender),
+        bug: bug + (bugReceiver - bugSender),
+      });
+      await playerReceiver.update({
+        moneyCash: moneyCash + (moneyCashSender - moneyCashReceiver),
+        egg: egg + (eggSender - eggReceiver),
+        feather: feather + (featherSender - featherReceiver),
+        bug: bug + (bugSender - bugReceiver),
+      });
+      await trade.update({
+        closed: true,
+      });
     },
   },
 

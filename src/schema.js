@@ -18,6 +18,7 @@ const typeDefs = gql`
     img: String
     build: String
     ability: String
+    abilityParam: String
     moneyCash: Int
     egg: Int
     feather: Int
@@ -91,7 +92,23 @@ const typeDefs = gql`
       inGame: Boolean!
     ): Player!
 
+    createPublicMessage(playerId: Int, content: String): PublicMessage
+
     closeTrade(id: Int, closed: Boolean): Trade
+
+    acceptTrade(
+      id: Int
+      playerSenderId: Int
+      playerReceiverId: Int
+      moneyCashSender: Int
+      moneyCashReceiver: Int
+      eggSender: Int
+      eggReceiver: Int
+      featherSender: Int
+      featherReceiver: Int
+      bugSender: Int
+      bugReceiver: Int
+    ): Trade
 
     suggestTrade(
       playerSenderId: Int
@@ -104,7 +121,6 @@ const typeDefs = gql`
       featherReceiver: Int
       bugSender: Int
       bugReceiver: Int
-      closed: Boolean
     ): Trade
     # values when start game: inGame=true, img=randomized, gameId=gameId
     # values when leave game: inGame=false, img=null, gameId=null, build=null, ability=null

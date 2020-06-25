@@ -1,4 +1,7 @@
 "use strict";
+
+const { sequelize } = require("../models");
+
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable("players", {
@@ -24,10 +27,10 @@ module.exports = {
         type: Sequelize.STRING,
       },
       build: {
-        type: Sequelize.JSON,
+        type: Sequelize.STRING,
       },
       ability: {
-        type: Sequelize.JSON,
+        type: Sequelize.STRING,
       },
       moneyCash: {
         type: Sequelize.INTEGER,
