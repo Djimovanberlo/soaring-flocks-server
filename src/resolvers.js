@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const { checkForResolveTypeResolver } = require("apollo-server");
+const { Connection } = require("pg");
 const Player = require("../models").player;
 
 const resolvers = {
@@ -41,13 +42,16 @@ const resolvers = {
       { playerSenderId, playerReceiverId },
       { models }
     ) {
-      return models.trade.findAll({
-        where: {
-          playerSenderId,
-          playerReceiverId,
-          closed: false,
-        },
-      });
+      try {
+        return models.trade.findOne({
+          where: {
+            playerSenderId,
+            playerReceiverId,
+          },
+        });
+      } catch (e) {
+        return e;
+      }
     },
   },
 
@@ -132,36 +136,56 @@ const resolvers = {
       },
       { models }
     ) {
+      console.log(
+        "LEES DEES",
+        id,
+        playerSenderId,
+        playerReceiverId,
+        moneyCashSender,
+        moneyCashReceiver,
+        eggSender,
+        eggReceiver,
+        featherSender,
+        featherReceiver,
+        bugSender,
+        bugReceiver
+      );
       const playerSender = await models.player.findOne({
         where: {
           id: playerSenderId,
         },
       });
+      console.log("PLAYERSENDER", playerSender);
       const playerReceiver = await models.player.findOne({
         where: {
           id: playerReceiverId,
         },
       });
+      console.log("playerReceiver", playerReceiver);
       const trade = await models.trade.findOne({
         where: {
           id,
         },
       });
+      console.log("trade", trade);
       await playerSender.update({
-        moneyCash: moneyCash + (moneyCashReceiver - moneyCashSender),
-        egg: egg + (eggReceiver - eggSender),
-        feather: feather + (featherReceiver - featherSender),
-        bug: bug + (bugReceiver - bugSender),
+        moneyCash:
+          playerSender.moneyCash + (moneyCashReceiver - moneyCashSender),
+        egg: playerSender.egg + (eggReceiver - eggSender),
+        feather: playerSender.feather + (featherReceiver - featherSender),
+        bug: playerSender.bug + (bugReceiver - bugSender),
       });
       await playerReceiver.update({
-        moneyCash: moneyCash + (moneyCashSender - moneyCashReceiver),
-        egg: egg + (eggSender - eggReceiver),
-        feather: feather + (featherSender - featherReceiver),
-        bug: bug + (bugSender - bugReceiver),
+        moneyCash:
+          playerReceiver.moneyCash + (moneyCashSender - moneyCashReceiver),
+        egg: playerReceiver.egg + (eggSender - eggReceiver),
+        feather: playerSender.feather + (featherSender - featherReceiver),
+        bug: playerReceiver.bug + (bugSender - bugReceiver),
       });
       await trade.update({
         closed: true,
       });
+      console.log("LAS DAS", playerSender, playerReceiver, trade);
     },
   },
 

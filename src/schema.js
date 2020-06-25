@@ -52,7 +52,7 @@ const typeDefs = gql`
   }
 
   type Trade {
-    id: Int!
+    id: Int
     moneyCashSender: Int
     moneyCashReceiver: Int
     eggSender: Int
@@ -70,17 +70,22 @@ const typeDefs = gql`
 
   type Query {
     getPlayerById(id: Int): Player
+
     getAllPlayersGameState(inGame: Boolean): [Player]
+
     getAllPublicMessages: [PublicMessage]
+
     getPrivateMessagesById(
       playerSenderId: Int
       playerReceiverId: Int
     ): [PrivateMessage]
+
     getTradesById(
       playerSenderId: Int
       playerReceiverId: Int
       closed: Boolean
-    ): [Trade]
+    ): Trade
+
     getGameById(id: Int): Game
   }
 
@@ -111,6 +116,7 @@ const typeDefs = gql`
     ): Trade
 
     suggestTrade(
+      id: Int
       playerSenderId: Int
       playerReceiverId: Int
       moneyCashSender: Int
