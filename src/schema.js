@@ -98,6 +98,8 @@ const typeDefs = gql`
 
     createAttack(playerId: Int, ability: String): Player
 
+    createMarket(playerId: Int, market: String, cashMoney: Int): Player
+
     acceptTrade(
       id: Int
       playerSenderId: Int

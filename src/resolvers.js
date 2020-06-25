@@ -65,6 +65,36 @@ const resolvers = {
       });
     },
 
+    async createMarket(root, { playerId, market, cashMoney }, { models }) {
+      const player = await models.player.findByPk(playerId);
+      // reduce resources
+      if (market === "Money Market") {
+        player.update({
+          mMarket: player.mMarket + 1,
+          cashMoney: player.cashMoney - cashMoney,
+          egg: player.egg - 1,
+          feather: player.feather - 1,
+          bug: player.bug - 1,
+        });
+      } else if (market === "Rare Market") {
+        player.update({
+          rMarket: player.rMarket + 1,
+          cashMoney: player.cashMoney - cashMoney,
+          egg: player.egg - 1,
+          feather: player.feather - 1,
+          bug: player.bug - 1,
+        });
+      } else if (market === "Victory Market") {
+        player.update({
+          vMarket: player.vMarket + 1,
+          cashMoney: player.cashMoney - cashMoney,
+          egg: player.egg - 1,
+          feather: player.feather - 1,
+          bug: player.bug - 1,
+        });
+      }
+    },
+
     async createAttack(root, { playerId, ability }, { models }) {
       const attacker = await models.player.findByPk(playerId);
       const victim = await models.player.findOne({
