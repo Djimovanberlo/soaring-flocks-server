@@ -6,9 +6,9 @@ module.exports = {
       "games",
       [
         {
-          gameTitle: "Soaring Stocks",
+          gameTitle: "Soaring Flocks",
           gameTime: 20,
-          gameTimePassed: 5,
+          gameTimePassed: 10,
           closed: false,
           createdAt: new Date(),
           updatedAt: new Date(),
