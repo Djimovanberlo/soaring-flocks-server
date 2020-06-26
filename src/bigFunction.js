@@ -1,5 +1,8 @@
+// const { Game } = require("./resolvers");
+
 const Resource = require("../models").resource;
 const Player = require("../models").player;
+const Game = require("../models").game;
 const PrivateMessage = require("../models").privateMessage;
 
 // async function getPrivateMessagesById(playerSenderId, playerReceiverId) {
@@ -82,6 +85,15 @@ async function bigFunction() {
     //   })
     // );
   });
+  const allGames = await Game.findAll();
+  allGames.forEach((game) => {
+    console.log(game);
+    game.update({
+      gameTime: game.gameTime - 1,
+      gameTimePassed: game.gameTimePassed + 1,
+    });
+  });
+  // console.log(allGames);
 }
 
 bigFunction();
