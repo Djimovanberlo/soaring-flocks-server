@@ -37,7 +37,7 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
           playerSenderId: 1,
-          playerReceiverId: 3,
+          playerReceiverId: 2,
         },
         {
           moneyCashSender: 3,
@@ -50,7 +50,7 @@ module.exports = {
           bugReceiver: 0,
           vPointSender: 0,
           vPointReceiver: 0,
-          closed: true,
+          closed: false,
           createdAt: new Date(),
           updatedAt: new Date(),
           playerSenderId: 2,

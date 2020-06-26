@@ -47,6 +47,7 @@ const resolvers = {
           where: {
             playerSenderId,
             playerReceiverId,
+            closed: false,
           },
         });
       } catch (e) {
