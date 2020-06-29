@@ -44,7 +44,7 @@ const typeDefs = gql`
   }
 
   type PublicMessage {
-    id: Int!
+    id: Int
     content: String
     createdAt: String
     updatedAt: String
