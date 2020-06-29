@@ -143,7 +143,7 @@ const resolvers = {
         content,
       });
       const allMessages = await models.publicMessage.findAll();
-      console.log("HALLOO DAAR", allMessages);
+      // console.log("HALLOO DAAR", allMessages);
       pubsub.publish("MESSAGE_ADDED", {
         messages: allMessages,
       });
