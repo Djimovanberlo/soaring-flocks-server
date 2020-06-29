@@ -138,7 +138,7 @@ const typeDefs = gql`
   }
 
   type Subscription {
-    getAllPublicMessages: [PublicMessage]
+    messageAdded: [PublicMessage]
   }
   # type Resource {
   #   id: Int!

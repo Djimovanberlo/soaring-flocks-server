@@ -5,11 +5,16 @@ const resolvers = require("./resolvers");
 const models = require("../models");
 const corsMiddleWare = require("cors");
 const { PORT } = require("../config/constants");
+const SubscriptionServer = require("subscriptions-transport-ws");
+const { execute, subscribe } = require("graphql");
+const { checkForResolveTypeResolver, PubSub } = require("apollo-server");
+// const websocketServer = createServer();
+const pubsub = new PubSub();
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: { models },
+  context: { models, pubsub },
   // context: ({ req, res }) => {
   //   const token = req.headers.authorization || "";
   //   const user = getUser(token);
