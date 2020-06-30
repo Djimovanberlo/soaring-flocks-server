@@ -1,12 +1,19 @@
+// export const pubsub = new PubSub();
 const bcrypt = require("bcryptjs");
-const { checkForResolveTypeResolver } = require("apollo-server");
+// const subhub = require("subhub");
+const { checkForResolveTypeResolver, PubSub } = require("apollo-server");
 const { Connection } = require("pg");
+// import { PubSub } from "graphql-subscriptions";
+
+const pubsub = new PubSub();
 const Player = require("../models").player;
 
 const resolvers = {
   Query: {
     async getAllPublicMessages(root, { content, playerId }, { models }) {
-      return models.publicMessage.findAll();
+      return models.publicMessage.findAll({
+        limit: 10,
+      });
     },
 
     async getPlayerById(root, { id }, { models }) {
@@ -132,10 +139,15 @@ const resolvers = {
       }
     },
 
-    async createPublicMessage(root, { playerId, content }, { models }) {
-      await models.publicMessage.create({
+    async createPublicMessage(root, { playerId, content }, { models, pubsub }) {
+      const newMessage = await models.publicMessage.create({
         playerId,
         content,
+      });
+      // const allMessages = await models.publicMessage.findAll();
+      // console.log("HALLOO DAAR", allMessages);
+      pubsub.publish("MESSAGE_ADDED", {
+        messageAdded: newMessage,
       });
     },
 
@@ -180,10 +192,12 @@ const resolvers = {
     async addBuild(root, { id, build }, { models }) {
       return models.player.findByPk(id);
     },
+
     async closeTrade(root, { id, closed }, { models }) {
       const trade = await models.trade.findByPk(id);
       console.log("OH HALLO", trade);
       await trade.update({ closed });
+      return trade;
     },
 
     async acceptTrade(
@@ -256,11 +270,18 @@ const resolvers = {
     },
   },
 
+  // https://www.youtube.com/watch?v=_r2ooFgBdoc&list=PLN3n1USn4xln0j_NN9k4j5hS1thsGibKi&index=4
   Subscription: {
-    async getAllPublicMessages(root, { content, playerId }, { models }) {
-      return models.publicMessage.findAll();
+    messageAdded: {
+      subscribe: (_, __, { pubsub }) => pubsub.asyncIterator("MESSAGE_ADDED"),
     },
   },
+
+  // Subscription: {
+  //   async getAllPublicMessages(root, { content, playerId }, { models }) {
+  //     return models.publicMessage.findAll();
+  //   },
+  // },
 
   Game: {
     async players(game) {
