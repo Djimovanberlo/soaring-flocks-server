@@ -12,7 +12,8 @@ const resolvers = {
   Query: {
     async getAllPublicMessages(root, { content, playerId }, { models }) {
       return models.publicMessage.findAll({
-        limit: 10,
+        // limit: 10,
+        // order: ["createdAt", "asc"],
       });
     },
 
