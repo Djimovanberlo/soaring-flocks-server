@@ -138,14 +138,14 @@ const resolvers = {
     },
 
     async createPublicMessage(root, { playerId, content }, { models, pubsub }) {
-      await models.publicMessage.create({
+      const newMessage = await models.publicMessage.create({
         playerId,
         content,
       });
-      const allMessages = await models.publicMessage.findAll();
+      // const allMessages = await models.publicMessage.findAll();
       // console.log("HALLOO DAAR", allMessages);
       pubsub.publish("MESSAGE_ADDED", {
-        messageAdded: allMessages,
+        messageAdded: newMessage,
       });
     },
 
