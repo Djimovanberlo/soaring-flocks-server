@@ -11,7 +11,9 @@ const Player = require("../models").player;
 const resolvers = {
   Query: {
     async getAllPublicMessages(root, { content, playerId }, { models }) {
-      return models.publicMessage.findAll();
+      return models.publicMessage.findAll({
+        limit: 10,
+      });
     },
 
     async getPlayerById(root, { id }, { models }) {
