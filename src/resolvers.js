@@ -91,8 +91,18 @@ const resolvers = {
         password: await bcrypt.hash(password, 10),
         img,
         inGame: true,
+        gameId: 1,
+        mMarket: 1,
+        rMarket: 2,
+        vMarket: 0,
+        moneyCash: 2,
+        egg: 1,
+        feather: 1,
+        bug: 1,
+        vPoint: 0,
       });
     },
+    // to do? delete password before return, so you don't send the hashed pw back
 
     async loginPlayer(root, { name, email, password }, { models }) {
       console.log("HELLO", email, password);

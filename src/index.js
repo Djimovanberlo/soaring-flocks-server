@@ -26,17 +26,35 @@ const getPlayer = (token) => {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ req }) => {
-    const tokenWithBearer = req.header.authorization || "";
-    const token = tokenWithBearer.split(" ")[1];
-    const player = getPlayer(token);
-    return {
-      player,
-      models,
-      pubsub,
-    };
-  },
+  context: { models, pubsub },
+  // context: ({ req, res }) => {
+  //   const token = req.headers.authorization || "";
+  //   const user = getUser(token);
+
+  //   if (!user) throw new AuthenticationError("you must be logged in");
+  //   return { user };
+
+  // const player = getPlayer(token);
+
+  // if (!player) throw new AuthenticationError("You must be logged in");
+  // return { player };
+  // },
 });
+
+// const server = new ApolloServer({
+//   typeDefs,
+//   resolvers,
+//   context: ({ req }) => {
+//     const tokenWithBearer = req.header.authorization || "";
+//     const token = tokenWithBearer.split(" ")[1];
+//     const player = getPlayer(token);
+//     return {
+//       player,
+//       models,
+//       pubsub,
+//     };
+//   },
+// });
 
 // var corsOptions = {
 //   origin: "localhost:3000/",
