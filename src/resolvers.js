@@ -2,6 +2,8 @@
 const bcrypt = require("bcryptjs");
 // const subhub = require("subhub");
 const { checkForResolveTypeResolver, PubSub } = require("apollo-server");
+const jwt = require("jsonwebtoken");
+const { toJWT } = require("../auth/jwt");
 const { Connection } = require("pg");
 // import { PubSub } from "graphql-subscriptions";
 
@@ -11,10 +13,12 @@ const Player = require("../models").player;
 const resolvers = {
   Query: {
     async getAllPublicMessages(root, { content, playerId }, { models }) {
-      return models.publicMessage.findAll({
-        // limit: 10,
-        // order: ["createdAt", "asc"],
+      const publicMessages = await models.publicMessage.findAll({
+        limit: 10,
+        order: [["createdAt", "DESC"]],
       });
+      publicMessages.reverse();
+      return publicMessages;
     },
 
     async getPlayerById(root, { id }, { models }) {
@@ -64,14 +68,48 @@ const resolvers = {
     },
   },
 
+  async getCurrentPlayer(root, args, { models }) {
+    if (!player) {
+      throw new Error("Not authenticated");
+    }
+    return models.player.findOne({
+      where: {
+        id: player.id,
+      },
+    });
+  },
+
   Mutation: {
-    async createPlayer(root, { name, email, password, inGame }, { models }) {
+    async createPlayer(
+      root,
+      { name, email, password, img, inGame },
+      { models }
+    ) {
       return models.player.create({
         name,
         email,
         password: await bcrypt.hash(password, 10),
-        inGame: false,
+        img,
+        inGame: true,
       });
+    },
+
+    async loginPlayer(root, { name, email, password }, { models }) {
+      if (!email || !password) {
+        throw new Error("please provide both email and password");
+      }
+      const player = await models.player.findOne({ where: { email } });
+
+      if (!player || !bcrypt.compareSync(password, player.password)) {
+        throw new Error("User with that email not found or password incorrect");
+      }
+
+      const token = jwt.sign(
+        { id: player.id },
+        "my-secret-from-env-file-in-prod",
+        { expiresIn: "1h" }
+      );
+      return { token, player };
     },
 
     async createMarket(root, { playerId, market, cashMoney }, { models }) {

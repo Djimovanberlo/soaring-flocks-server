@@ -68,8 +68,15 @@ const typeDefs = gql`
     playerReceiverId: Player
   }
 
+  type LoginResponse {
+    token: String
+    player: Player
+  }
+
   type Query {
     getPlayerById(id: Int): Player
+
+    getCurrentPlayer: Player
 
     getAllPlayersGameState(inGame: Boolean): [Player]
 
@@ -90,7 +97,14 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    createPlayer(name: String, email: String, password: String): Player!
+    createPlayer(
+      name: String
+      email: String
+      password: String
+      img: String
+    ): Player!
+
+    loginPlayer(name: String, email: String, password: String): LoginResponse
 
     createPublicMessage(playerId: Int, content: String): PublicMessage
 
@@ -140,49 +154,6 @@ const typeDefs = gql`
   type Subscription {
     messageAdded: PublicMessage
   }
-  # type Resource {
-  #   id: Int!
-  #   type: String!
-  #   tradeResources: [TradeResource!]!
-  #   playerResources: [PlayerResource]
-  #   players: [Player]
-  # }
-
-  # type Message {
-  #   id: Int!
-  #   content: String!
-  #   playerId: Int!
-  #   player: Player!
-  # }
-
-  # type Trade {
-  #   id: Int!
-  #   closed: Boolean!
-  #   playerSenderId: Int!
-  #   playerReceiverId: Int!
-  #   player: Player!
-  #   tradeResources: [TradeResource!]!
-  # }
-
-  # type TradeResource {
-  #   id: Int!
-  #   quantitySent: Int
-  #   quantityReceived: Int
-  #   tradeId: Trade!
-  #   trade: Trade!
-  #   resourceSent: Int
-  #   resourceReceived: Int
-  #   resource: Resource
-  # }
-
-  # type PlayerResource {
-  #   id: Int!
-  #   quantity: Int
-  #   playerId: Int
-  #   player: [Player]
-  #   resourceId: Int
-  #   resource: [Resource]
-  # }
 `;
 
 module.exports = typeDefs;
