@@ -68,16 +68,16 @@ const resolvers = {
     },
   },
 
-  async getCurrentPlayer(root, args, { models }) {
-    if (!player) {
-      throw new Error("Not authenticated");
-    }
-    return models.player.findOne({
-      where: {
-        id: player.id,
-      },
-    });
-  },
+  // async getCurrentPlayer(root, args, { models }) {
+  //   if (!player) {
+  //     throw new Error("Not authenticated");
+  //   }
+  //   return models.player.findOne({
+  //     where: {
+  //       id: player.id,
+  //     },
+  //   });
+  // },
 
   Mutation: {
     async createPlayer(
@@ -95,6 +95,7 @@ const resolvers = {
     },
 
     async loginPlayer(root, { name, email, password }, { models }) {
+      console.log("HELLO", email, password);
       if (!email || !password) {
         throw new Error("please provide both email and password");
       }
