@@ -22,6 +22,7 @@ const resolvers = {
     },
 
     async getPlayerById(root, { id }, { models }) {
+      console.log("GET PLAYER", models.player.findByPk(id));
       return models.player.findByPk(id);
     },
 
