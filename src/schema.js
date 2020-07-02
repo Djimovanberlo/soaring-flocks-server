@@ -102,7 +102,7 @@ const typeDefs = gql`
       email: String
       password: String
       img: String
-    ): Player!
+    ): LoginResponse
 
     loginPlayer(name: String, email: String, password: String): LoginResponse
 

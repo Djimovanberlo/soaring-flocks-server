@@ -86,7 +86,10 @@ const resolvers = {
       { name, email, password, img, inGame },
       { models }
     ) {
-      return models.player.create({
+      if (!email || !password || !name) {
+        throw new Error("please provide name, email and password");
+      }
+      const player = await models.player.create({
         name,
         email,
         password: await bcrypt.hash(password, 10),
@@ -102,7 +105,37 @@ const resolvers = {
         bug: 1,
         vPoint: 0,
       });
+      const token = jwt.sign(
+        { id: player.id },
+        "my-secret-from-env-file-in-prod",
+        { expiresIn: "1h" }
+      );
+      return { token, player };
+      //  },
     },
+
+    // async createPlayer(
+    //   root,
+    //   { name, email, password, img, inGame },
+    //   { models }
+    // ) {
+    //   return models.player.create({
+    //     name,
+    //     email,
+    //     password: await bcrypt.hash(password, 10),
+    //     img,
+    //     inGame: true,
+    //     gameId: 1,
+    //     mMarket: 1,
+    //     rMarket: 2,
+    //     vMarket: 0,
+    //     moneyCash: 2,
+    //     egg: 1,
+    //     feather: 1,
+    //     bug: 1,
+    //     vPoint: 0,
+    //   });
+    // },
     // to do? delete password before return, so you don't send the hashed pw back
 
     async loginPlayer(root, { name, email, password }, { models }) {
