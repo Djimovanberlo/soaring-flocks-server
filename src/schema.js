@@ -71,6 +71,11 @@ const typeDefs = gql`
   type LoginResponse {
     token: String
     player: Player
+    error: String
+  }
+
+  type Error {
+    message: String
   }
 
   type Query {

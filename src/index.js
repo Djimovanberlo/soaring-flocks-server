@@ -29,6 +29,10 @@ const server = new ApolloServer({
   context: { models, pubsub },
 });
 
-// console.log("RRRRRRRRRRRRRRRRRRRRRRRRRR", headers);
+// let corsOptions = {
+//   origin: "http://localhost:3000/",
+//   credentials: true,
+// };
 
+// server.use(corsMiddleWare(corsOptions));
 server.listen().then(({ url }) => console.log(`🚀 Listening on port: ${url}`));

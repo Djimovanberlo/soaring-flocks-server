@@ -5,6 +5,7 @@ const { checkForResolveTypeResolver, PubSub } = require("apollo-server");
 const jwt = require("jsonwebtoken");
 const { toJWT } = require("../auth/jwt");
 const { Connection } = require("pg");
+const { GraphQLError } = require("graphql");
 // import { PubSub } from "graphql-subscriptions";
 
 const pubsub = new PubSub();
@@ -87,7 +88,9 @@ const resolvers = {
       { models }
     ) {
       if (!email || !password || !name) {
-        throw new Error("please provide name, email and password");
+        return {
+          error: "Provide name, email and password",
+        };
       }
       const player = await models.player.create({
         name,
@@ -111,7 +114,6 @@ const resolvers = {
         { expiresIn: "1h" }
       );
       return { token, player };
-      //  },
     },
 
     // async createPlayer(
@@ -141,12 +143,18 @@ const resolvers = {
     async loginPlayer(root, { name, email, password }, { models }) {
       console.log("HELLO", email, password);
       if (!email || !password) {
-        throw new Error("please provide both email and password");
+        // return new GraphQLError("please provide both email and password");
+        return {
+          error: "Provide both email and password",
+        };
       }
+
       const player = await models.player.findOne({ where: { email } });
 
       if (!player || !bcrypt.compareSync(password, player.password)) {
-        throw new Error("User with that email not found or password incorrect");
+        return {
+          error: "User with that email not found or password incorrect",
+        };
       }
 
       const token = jwt.sign(
