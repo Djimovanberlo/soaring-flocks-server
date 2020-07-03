@@ -66,15 +66,25 @@ const typeDefs = gql`
     closed: Boolean
     playerSenderId: Player
     playerReceiverId: Player
+    error: String
   }
 
   type LoginResponse {
     token: String
     player: Player
+    error: String
+  }
+
+  type Error {
+    message: String
   }
 
   type Query {
-    getPlayerById(id: Int): Player
+    getPlayerByToken(token: String): LoginResponse
+
+    # getPlayerById(id: Int): Player
+
+    refreshPlayer(token: String): LoginResponse
 
     getCurrentPlayer: Player
 
@@ -102,7 +112,7 @@ const typeDefs = gql`
       email: String
       password: String
       img: String
-    ): Player!
+    ): LoginResponse
 
     loginPlayer(name: String, email: String, password: String): LoginResponse
 
