@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 // const subhub = require("subhub");
 const { checkForResolveTypeResolver, PubSub } = require("apollo-server");
 const jwt = require("jsonwebtoken");
-const { toJWT } = require("../auth/jwt");
+const { toJWT, toData } = require("../auth/jwt");
 const { Connection } = require("pg");
 const { GraphQLError } = require("graphql");
 // import { PubSub } from "graphql-subscriptions";
@@ -22,9 +22,21 @@ const resolvers = {
       return publicMessages;
     },
 
-    async getPlayerById(root, { id }, { models }) {
-      console.log("GET PLAYER", models.player.findByPk(id));
-      return models.player.findByPk(id);
+    async getPlayerByToken(root, { id }, { models }) {
+      // console.log("GET PLAYER", models.player.findByPk(id));
+
+      const player = await models.player.findByPk(1);
+      // const token = jwt.sign(
+      //   { id: player.id },
+      //   "my-secret-from-env-file-in-prod",
+      //   { expiresIn: "1h" }
+      // );
+      return { player };
+    },
+
+    async refreshPlayer(root, { token }, { models }) {
+      console.log("TOKEN TIME", token);
+      return { token };
     },
 
     async getGameById(root, { id }, { models }) {
@@ -32,7 +44,7 @@ const resolvers = {
     },
 
     async getAllPlayersGameState(root, { inGame }, { models }) {
-      console.log(models.playerinGame);
+      // console.log(models.playerinGame);
       return models.player.findAll({
         where: { inGame },
       });
@@ -92,28 +104,64 @@ const resolvers = {
           error: "Provide name, email and password",
         };
       }
-      const player = await models.player.create({
-        name,
-        email,
-        password: await bcrypt.hash(password, 10),
-        img,
-        inGame: true,
-        gameId: 1,
-        mMarket: 1,
-        rMarket: 2,
-        vMarket: 0,
-        moneyCash: 2,
-        egg: 1,
-        feather: 1,
-        bug: 1,
-        vPoint: 0,
+      const existingEmail = await models.player.findOne({
+        where: {
+          email,
+        },
       });
-      const token = jwt.sign(
-        { id: player.id },
-        "my-secret-from-env-file-in-prod",
-        { expiresIn: "1h" }
-      );
-      return { token, player };
+      if (existingEmail) {
+        return {
+          error: "Player with that email already exists",
+        };
+      }
+
+      const existingName = await models.player.findOne({
+        where: {
+          name,
+        },
+      });
+      if (existingName) {
+        return {
+          error: "Player with that name already exists",
+        };
+      }
+
+      const allPlayers = await models.player.findAll();
+      if (allPlayers.length > 25) {
+        return {
+          error:
+            "Playerlimit reached. No more space for new players in current version",
+        };
+      }
+
+      try {
+        const player = await models.player.create({
+          name,
+          email,
+          password: await bcrypt.hash(password, 10),
+          img,
+          inGame: true,
+          gameId: 1,
+          mMarket: 1,
+          rMarket: 2,
+          vMarket: 0,
+          moneyCash: 2,
+          egg: 1,
+          feather: 1,
+          bug: 1,
+          vPoint: 0,
+        });
+        const token = jwt.sign(
+          { id: player.id },
+          "my-secret-from-env-file-in-prod",
+          { expiresIn: "1h" }
+        );
+        return { token, player };
+      } catch (err) {
+        return {
+          error: err,
+        };
+      }
     },
 
     // async createPlayer(
@@ -141,7 +189,7 @@ const resolvers = {
     // to do? delete password before return, so you don't send the hashed pw back
 
     async loginPlayer(root, { name, email, password }, { models }) {
-      console.log("HELLO", email, password);
+      // console.log("HELLO", email, password);
       if (!email || !password) {
         // return new GraphQLError("please provide both email and password");
         return {
@@ -149,20 +197,26 @@ const resolvers = {
         };
       }
 
-      const player = await models.player.findOne({ where: { email } });
+      try {
+        const player = await models.player.findOne({ where: { email } });
 
-      if (!player || !bcrypt.compareSync(password, player.password)) {
+        if (!player || !bcrypt.compareSync(password, player.password)) {
+          return {
+            error: "User with that email not found or password incorrect",
+          };
+        }
+
+        const token = jwt.sign(
+          { id: player.id },
+          "my-secret-from-env-file-in-prod",
+          { expiresIn: "1h" }
+        );
+        return { token, player };
+      } catch (err) {
         return {
-          error: "User with that email not found or password incorrect",
+          error: err,
         };
       }
-
-      const token = jwt.sign(
-        { id: player.id },
-        "my-secret-from-env-file-in-prod",
-        { expiresIn: "1h" }
-      );
-      return { token, player };
     },
 
     async createMarket(root, { playerId, market, cashMoney }, { models }) {
@@ -204,7 +258,7 @@ const resolvers = {
         return Math.floor(Math.random() * Math.floor(max));
       }
       const resource = getRandomInt(5);
-      console.log("HELAAS", victim, "DADER", attacker, "DOEI", resource);
+      // console.log("HELAAS", victim, "DADER", attacker, "DOEI", resource);
       await attacker.update({
         moneyCash: attacker.moneyCash - 1,
       });
@@ -259,13 +313,13 @@ const resolvers = {
       },
       { models }
     ) {
-      const existingTrade = await models.trade.findOne({
-        where: { playerSenderId, playerReceiverId },
-      });
+      // const existingTrade = await models.trade.findOne({
+      //   where: { playerSenderId, playerReceiverId },
+      // });
       // if (existingTrade) {
       //   console.log("ALREADY EXISTBOY");
       // } else {
-      await models.trade.create({
+      const newTrade = await models.trade.create({
         playerSenderId,
         playerReceiverId,
         moneyCashSender,
@@ -278,6 +332,7 @@ const resolvers = {
         bugReceiver,
         closed: false,
       });
+      console.log(newTrade);
       // }
     },
 
@@ -287,7 +342,7 @@ const resolvers = {
 
     async closeTrade(root, { id, closed }, { models }) {
       const trade = await models.trade.findByPk(id);
-      console.log("OH HALLO", trade);
+      // console.log("OH HALLO", trade);
       await trade.update({ closed });
       return trade;
     },
@@ -309,20 +364,20 @@ const resolvers = {
       },
       { models }
     ) {
-      console.log(
-        "LEES DEES",
-        id,
-        playerSenderId,
-        playerReceiverId,
-        moneyCashSender,
-        moneyCashReceiver,
-        eggSender,
-        eggReceiver,
-        featherSender,
-        featherReceiver,
-        bugSender,
-        bugReceiver
-      );
+      // console.log(
+      //   "LEES DEES",
+      //   id,
+      //   playerSenderId,
+      //   playerReceiverId,
+      //   moneyCashSender,
+      //   moneyCashReceiver,
+      //   eggSender,
+      //   eggReceiver,
+      //   featherSender,
+      //   featherReceiver,
+      //   bugSender,
+      //   bugReceiver
+      // );
       const playerSender = await models.player.findOne({
         where: {
           id: playerSenderId,
@@ -334,6 +389,7 @@ const resolvers = {
           id: playerReceiverId,
         },
       });
+
       console.log("playerReceiver", playerReceiver);
       const trade = await models.trade.findOne({
         where: {
@@ -341,6 +397,22 @@ const resolvers = {
         },
       });
       console.log("trade", trade);
+
+      if (
+        moneyCashSender > playerSender.moneyCash ||
+        moneyCashReceiver > playerReceiver.moneyCash ||
+        eggSender > playerSender.egg ||
+        eggReceiver > playerReceiver.egg ||
+        featherSender > playerSender.feather ||
+        featherReceiver > playerReceiver.feather ||
+        bugSender > playerSender.bug ||
+        bugReceiver > playerReceiver.bug
+      ) {
+        return {
+          error: "Player(s) cannot pay those resources",
+        };
+      }
+
       await playerSender.update({
         moneyCash:
           playerSender.moneyCash + (moneyCashReceiver - moneyCashSender),

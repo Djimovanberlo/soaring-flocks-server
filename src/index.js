@@ -12,17 +12,6 @@ const { checkForResolveTypeResolver, PubSub } = require("apollo-server");
 // const websocketServer = createServer();
 const pubsub = new PubSub();
 
-const getPlayer = (token) => {
-  try {
-    if (token) {
-      return jwt.verify(token, "my-secret-from-env-file-in-prod");
-    }
-    return null;
-  } catch (error) {
-    return null;
-  }
-};
-
 const server = new ApolloServer({
   typeDefs,
   resolvers,
