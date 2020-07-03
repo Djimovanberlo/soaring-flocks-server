@@ -22,10 +22,12 @@ const resolvers = {
       return publicMessages;
     },
 
-    async getPlayerByToken(root, { id }, { models }) {
-      // console.log("GET PLAYER", models.player.findByPk(id));
-
-      const player = await models.player.findByPk(1);
+    async getPlayerByToken(root, { token }, { models }) {
+      // FIND PLAYER BY TOKEN
+      console.log("TOKEN", token);
+      const plId = jwt.verify(token, "my-secret-from-env-file-in-prod");
+      console.log("TOKENMEN", plId);
+      const player = await models.player.findByPk(plId.id);
       // const token = jwt.sign(
       //   { id: player.id },
       //   "my-secret-from-env-file-in-prod",
