@@ -346,7 +346,7 @@ const resolvers = {
         },
       });
       console.log("CLOSED TRADES", allClosedTrades);
-      if (allClosedTrades.length > 100) {
+      if (allClosedTrades.length > 50) {
         console.log("CLOSED TRADE LENGTH");
         await models.trade.destroy({
           where: {
