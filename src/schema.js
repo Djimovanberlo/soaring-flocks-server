@@ -9,7 +9,6 @@ const typeDefs = gql`
     closed: Boolean!
     players: [Player!]!
   }
-
   type Player {
     id: Int
     name: String
@@ -33,7 +32,6 @@ const typeDefs = gql`
     privateMessages: [PrivateMessage]
     trades: [Trade]
   }
-
   type PrivateMessage {
     id: Int!
     content: String
@@ -42,7 +40,6 @@ const typeDefs = gql`
     playerSenderId: Player
     playerReceiverId: Player
   }
-
   type PublicMessage {
     id: Int
     content: String
@@ -50,7 +47,6 @@ const typeDefs = gql`
     updatedAt: String
     playerId: Player
   }
-
   type Trade {
     id: Int
     moneyCashSender: Int
@@ -68,44 +64,32 @@ const typeDefs = gql`
     playerReceiverId: Player
     error: String
   }
-
   type LoginResponse {
     token: String
     player: Player
     error: String
   }
-
   type Error {
     message: String
   }
-
   type Query {
     getPlayerByToken(token: String): LoginResponse
-
     # getPlayerById(id: Int): Player
-
     refreshPlayer(token: String): LoginResponse
-
     getCurrentPlayer: Player
-
     getAllPlayersGameState(inGame: Boolean): [Player]
-
     getAllPublicMessages: [PublicMessage]
-
     getPrivateMessagesById(
       playerSenderId: Int
       playerReceiverId: Int
     ): [PrivateMessage]
-
     getTradesById(
       playerSenderId: Int
       playerReceiverId: Int
       closed: Boolean
     ): Trade
-
     getGameById(id: Int): Game
   }
-
   type Mutation {
     createPlayer(
       name: String
@@ -113,17 +97,11 @@ const typeDefs = gql`
       password: String
       img: String
     ): LoginResponse
-
     loginPlayer(name: String, email: String, password: String): LoginResponse
-
     createPublicMessage(playerId: Int, content: String): PublicMessage
-
     closeTrade(id: Int, closed: Boolean): Trade
-
     createAttack(playerId: Int, ability: String): Player
-
     createMarket(playerId: Int, market: String, cashMoney: Int): Player
-
     acceptTrade(
       id: Int
       playerSenderId: Int
@@ -137,7 +115,6 @@ const typeDefs = gql`
       bugSender: Int
       bugReceiver: Int
     ): Trade
-
     suggestTrade(
       id: Int
       playerSenderId: Int
@@ -154,13 +131,10 @@ const typeDefs = gql`
     # values when start game: inGame=true, img=randomized, gameId=gameId
     # values when leave game: inGame=false, img=null, gameId=null, build=null, ability=null
     # set build / ability when selected
-
     addBuild(id: Int, build: String): Player
     addAbility(id: Int, ability: String): Player
-
     # createPublicMessage(content: String!, playerId: Int!): PublicMessage!
   }
-
   type Subscription {
     messageAdded: PublicMessage
   }
