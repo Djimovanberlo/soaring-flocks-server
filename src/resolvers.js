@@ -24,9 +24,9 @@ const resolvers = {
 
     async getPlayerByToken(root, { token }, { models }) {
       // FIND PLAYER BY TOKEN
-      console.log("TOKEN", token);
+      // console.log("TOKEN", token);
       const plId = jwt.verify(token, "my-secret-from-env-file-in-prod");
-      console.log("TOKENMEN", plId);
+      // console.log("TOKENMEN", plId);
       const player = await models.player.findByPk(plId.id);
       // const token = jwt.sign(
       //   { id: player.id },
@@ -288,14 +288,30 @@ const resolvers = {
     },
 
     async createPublicMessage(root, { playerId, content }, { models, pubsub }) {
-      const newMessage = await models.publicMessage.create({
+      const newPublicMessage = await models.publicMessage.create({
         playerId,
         content,
       });
-      // const allMessages = await models.publicMessage.findAll();
+      const allPublicMessages = await models.publicMessage.findAll();
+      console.log("AAAA", allPublicMessages);
+      if (allPublicMessages.length > 10) {
+        console.log("WWWW");
+        await models.publicMessage.destroy({
+          where: {},
+        });
+      }
+
+      // if (allClosedTrades.length > 100) {
+      //   console.log("CLOSED TRADE LENGTH");
+      //   await models.trade.destroy({
+      //     where: {
+      //       closed: true,
+      //     },
+      //   });
+      // }
       // console.log("HALLOO DAAR", allMessages);
       pubsub.publish("MESSAGE_ADDED", {
-        messageAdded: newMessage,
+        messageAdded: newPublicMessage,
       });
     },
 
@@ -321,6 +337,21 @@ const resolvers = {
       // if (existingTrade) {
       //   console.log("ALREADY EXISTBOY");
       // } else {
+      const allClosedTrades = await models.trade.findAll({
+        where: {
+          closed: true,
+        },
+      });
+      console.log("CLOSED TRADES", allClosedTrades);
+      if (allClosedTrades.length > 100) {
+        console.log("CLOSED TRADE LENGTH");
+        await models.trade.destroy({
+          where: {
+            closed: true,
+          },
+        });
+      }
+
       const newTrade = await models.trade.create({
         playerSenderId,
         playerReceiverId,
@@ -334,7 +365,7 @@ const resolvers = {
         bugReceiver,
         closed: false,
       });
-      console.log(newTrade);
+      // console.log(newTrade);
       // }
     },
 
@@ -366,39 +397,26 @@ const resolvers = {
       },
       { models }
     ) {
-      // console.log(
-      //   "LEES DEES",
-      //   id,
-      //   playerSenderId,
-      //   playerReceiverId,
-      //   moneyCashSender,
-      //   moneyCashReceiver,
-      //   eggSender,
-      //   eggReceiver,
-      //   featherSender,
-      //   featherReceiver,
-      //   bugSender,
-      //   bugReceiver
-      // );
+      // update for returning errors when written as subscription instead of mutation + force refresh
       const playerSender = await models.player.findOne({
         where: {
           id: playerSenderId,
         },
       });
-      console.log("PLAYERSENDER", playerSender);
+      // console.log("PLAYERSENDER", playerSender);
       const playerReceiver = await models.player.findOne({
         where: {
           id: playerReceiverId,
         },
       });
 
-      console.log("playerReceiver", playerReceiver);
+      // console.log("playerReceiver", playerReceiver);
       const trade = await models.trade.findOne({
         where: {
           id,
         },
       });
-      console.log("trade", trade);
+      // console.log("trade", trade);
 
       if (
         moneyCashSender > playerSender.moneyCash ||
@@ -410,9 +428,9 @@ const resolvers = {
         bugSender > playerSender.bug ||
         bugReceiver > playerReceiver.bug
       ) {
-        return {
-          error: "Player(s) cannot pay those resources",
-        };
+        await trade.update({
+          closed: true,
+        });
       }
 
       await playerSender.update({
