@@ -28,6 +28,7 @@ const resolvers = {
       const plId = jwt.verify(token, "my-secret-from-env-file-in-prod");
       // console.log("TOKENMEN", plId);
       const player = await models.player.findByPk(plId.id);
+      console.log("PPLLAAYYEERR", player);
       // const token = jwt.sign(
       //   { id: player.id },
       //   "my-secret-from-env-file-in-prod",
@@ -288,14 +289,19 @@ const resolvers = {
     },
 
     async createPublicMessage(root, { playerId, content }, { models, pubsub }) {
-      const newPublicMessage = await models.publicMessage.create({
-        playerId,
-        content,
-      });
+      if (playerId && content) {
+        const newPublicMessage = await models.publicMessage.create({
+          playerId,
+          content,
+        });
+        pubsub.publish("MESSAGE_ADDED", {
+          messageAdded: newPublicMessage,
+        });
+      }
       const allPublicMessages = await models.publicMessage.findAll();
-      console.log("AAAA", allPublicMessages);
+      // console.log("AAAA", allPublicMessages);
       if (allPublicMessages.length > 10) {
-        console.log("WWWW");
+        // console.log("WWWW");
         await models.publicMessage.destroy({
           where: {},
         });
@@ -310,9 +316,6 @@ const resolvers = {
       //   });
       // }
       // console.log("HALLOO DAAR", allMessages);
-      pubsub.publish("MESSAGE_ADDED", {
-        messageAdded: newPublicMessage,
-      });
     },
 
     async suggestTrade(
