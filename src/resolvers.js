@@ -33,7 +33,7 @@ const resolvers = {
       //   "my-secret-from-env-file-in-prod",
       //   { expiresIn: "1h" }
       // );
-      return { player };
+      return { player, token };
     },
 
     async refreshPlayer(root, { token }, { models }) {
