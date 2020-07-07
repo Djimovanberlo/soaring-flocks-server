@@ -9,6 +9,7 @@ const typeDefs = gql`
     closed: Boolean!
     players: [Player!]!
   }
+
   type Player {
     id: Int
     name: String
@@ -32,6 +33,7 @@ const typeDefs = gql`
     privateMessages: [PrivateMessage]
     trades: [Trade]
   }
+
   type PrivateMessage {
     id: Int!
     content: String
@@ -40,6 +42,7 @@ const typeDefs = gql`
     playerSenderId: Player
     playerReceiverId: Player
   }
+
   type PublicMessage {
     id: Int
     content: String
@@ -47,6 +50,7 @@ const typeDefs = gql`
     updatedAt: String
     playerId: Player
   }
+
   type Trade {
     id: Int
     moneyCashSender: Int
@@ -64,17 +68,15 @@ const typeDefs = gql`
     playerReceiverId: Player
     error: String
   }
+
   type LoginResponse {
     token: String
     player: Player
     error: String
   }
-  type Error {
-    message: String
-  }
+
   type Query {
     getPlayerByToken(token: String): LoginResponse
-    # getPlayerById(id: Int): Player
     refreshPlayer(token: String): LoginResponse
     getCurrentPlayer: Player
     getAllPlayersGameState(inGame: Boolean): [Player]
@@ -90,6 +92,7 @@ const typeDefs = gql`
     ): Trade
     getGameById(id: Int): Game
   }
+
   type Mutation {
     createPlayer(
       name: String
@@ -128,12 +131,11 @@ const typeDefs = gql`
       bugSender: Int
       bugReceiver: Int
     ): Trade
+    # for additional feature: start and end game:
     # values when start game: inGame=true, img=randomized, gameId=gameId
     # values when leave game: inGame=false, img=null, gameId=null, build=null, ability=null
-    # set build / ability when selected
     addBuild(id: Int, build: String): Player
     addAbility(id: Int, ability: String): Player
-    # createPublicMessage(content: String!, playerId: Int!): PublicMessage!
   }
   type Subscription {
     messageAdded: PublicMessage
