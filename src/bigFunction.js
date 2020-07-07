@@ -1,8 +1,9 @@
 const cron = require("node-cron");
+const { defaultFieldResolver } = require("graphql");
 const Player = require("../models").player;
 const Game = require("../models").game;
 
-async function bigFunction() {
+export default async function bigFunction() {
   try {
     const activePlayers = await Player.findAll({
       where: {
@@ -70,17 +71,4 @@ async function bigFunction() {
   }
 }
 
-const date = new Date();
-console.log(date, date.getHours());
-
-// const bigFunctionTimer = () => {
-//   setInterval(function () {
-//     const date = new Date();
-//     if (date.getHours() === 12 && date.getMinutes() === 34) {
-//       console.log("DATE", date);
-//       bigFunction();
-//     }
-//   }, 6000);
-// call every 6 sec
-// };
-// bigFunctionTimer();
+// module.exports.bigFunction = bigFunction;

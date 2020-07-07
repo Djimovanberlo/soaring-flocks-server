@@ -17,7 +17,11 @@ const resolvers = {
     async getPlayerByToken(root, { token }, { models }) {
       const plId = jwt.verify(token, "my-secret-from-env-file-in-prod");
       const player = await models.player.findByPk(plId.id);
-      return { player, token };
+      if (player) {
+        return { player, token };
+      } else if (!player) {
+        return { error: "token expired" };
+      }
     },
 
     async getGameById(root, { id }, { models }) {

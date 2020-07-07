@@ -1,13 +1,21 @@
 const { ApolloServer } = require("apollo-server");
+const { PubSub } = require("apollo-server");
+const cron = require("node-cron");
+
 const typeDefs = require("./src/schema");
 const resolvers = require("./src/resolvers");
 const models = require("./models");
-const { PubSub } = require("apollo-server");
+// const bigFunction = require("./src/bigFunction");
 const pubsub = new PubSub();
-const cron = require("node-cron");
 
 cron.schedule("* * * * *", () => {
-  console.log("CRONNING");
+  console.log("CRONNING1");
+  // bigFunction();
+});
+
+cron.schedule("* * * * *", () => {
+  console.log("CRONNING2");
+  // bigFunction();
 });
 
 const server = new ApolloServer({
