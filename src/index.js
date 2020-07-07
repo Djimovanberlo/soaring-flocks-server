@@ -1,15 +1,8 @@
-const { ApolloServer, AuthenticationError } = require("apollo-server");
-const express = require("express");
+const { ApolloServer } = require("apollo-server");
 const typeDefs = require("./schema");
 const resolvers = require("./resolvers");
 const models = require("../models");
-const jwt = require("jsonwebtoken");
-const corsMiddleWare = require("cors");
-const { PORT } = require("../config/constants");
-const SubscriptionServer = require("subscriptions-transport-ws");
-const { execute, subscribe } = require("graphql");
-const { checkForResolveTypeResolver, PubSub } = require("apollo-server");
-// const websocketServer = createServer();
+const { PubSub } = require("apollo-server");
 const pubsub = new PubSub();
 
 const server = new ApolloServer({
@@ -18,10 +11,4 @@ const server = new ApolloServer({
   context: { models, pubsub },
 });
 
-// let corsOptions = {
-//   origin: "http://localhost:3000/",
-//   credentials: true,
-// };
-
-// server.use(corsMiddleWare(corsOptions));
 server.listen().then(({ url }) => console.log(`🚀 Listening on port: ${url}`));

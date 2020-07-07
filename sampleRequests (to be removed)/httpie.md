@@ -1,4 +1,4 @@
-# Sample HTTPIE requests
+<!-- # Sample HTTPIE requests
 
 1. Walk through the in README first
 2. Start your server
@@ -64,4 +64,4 @@ http POST :4000/authorized_post_request Authorization:"Bearer <PASTE_YOUR_TOKEN_
 
 ```bash
 http POST :4000/authorized_post_request Authorization:"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIxLCJpYXQiOjE1ODQ2MTQxMjYsImV4cCI6MTU4NDYyMTMyNn0.3WKeq1MmGQaq5iMSds3ff8JNBJa5D2k3DDW645OFrAY" hello="world" number:=0 cheesesArray:='["cheddar", "rochefort", "stilton"]'
-```
+``` -->

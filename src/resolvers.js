@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 // const subhub = require("subhub");
 const { checkForResolveTypeResolver, PubSub } = require("apollo-server");
 const jwt = require("jsonwebtoken");
-const { toJWT, toData } = require("../auth/jwt");
+// const { toJWT, toData } = require("../auth (to be removed)/jwt");
 const { Connection } = require("pg");
 const { GraphQLError } = require("graphql");
 // import { PubSub } from "graphql-subscriptions";

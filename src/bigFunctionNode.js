@@ -1,7 +1,5 @@
-const Resource = require("../models").resource;
 const Player = require("../models").player;
 const Game = require("../models").game;
-const PrivateMessage = require("../models").privateMessage;
 
 async function bigFunction() {
   try {
@@ -58,3 +56,5 @@ async function bigFunction() {
     console.log(err);
   }
 }
+
+bigFunction();
