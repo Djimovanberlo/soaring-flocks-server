@@ -4,6 +4,11 @@ const resolvers = require("./src/resolvers");
 const models = require("./models");
 const { PubSub } = require("apollo-server");
 const pubsub = new PubSub();
+const cron = require("node-cron");
+
+cron.schedule("* * * * *", () => {
+  console.log("CRONNING");
+});
 
 const server = new ApolloServer({
   typeDefs,
