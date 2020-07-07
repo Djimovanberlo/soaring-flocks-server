@@ -290,8 +290,8 @@ const resolvers = {
     },
 
     async closeTrade(root, { id, closed }, { models }) {
+      const trade = await models.trade.findByPk(id);
       await trade.update({ closed });
-      return trade;
     },
 
     async acceptTrade(
@@ -341,25 +341,25 @@ const resolvers = {
         await trade.update({
           closed: true,
         });
+      } else {
+        await playerSender.update({
+          moneyCash:
+            playerSender.moneyCash + (moneyCashReceiver - moneyCashSender),
+          egg: playerSender.egg + (eggReceiver - eggSender),
+          feather: playerSender.feather + (featherReceiver - featherSender),
+          bug: playerSender.bug + (bugReceiver - bugSender),
+        });
+        await playerReceiver.update({
+          moneyCash:
+            playerReceiver.moneyCash + (moneyCashSender - moneyCashReceiver),
+          egg: playerReceiver.egg + (eggSender - eggReceiver),
+          feather: playerSender.feather + (featherSender - featherReceiver),
+          bug: playerReceiver.bug + (bugSender - bugReceiver),
+        });
+        await trade.update({
+          closed: true,
+        });
       }
-
-      await playerSender.update({
-        moneyCash:
-          playerSender.moneyCash + (moneyCashReceiver - moneyCashSender),
-        egg: playerSender.egg + (eggReceiver - eggSender),
-        feather: playerSender.feather + (featherReceiver - featherSender),
-        bug: playerSender.bug + (bugReceiver - bugSender),
-      });
-      await playerReceiver.update({
-        moneyCash:
-          playerReceiver.moneyCash + (moneyCashSender - moneyCashReceiver),
-        egg: playerReceiver.egg + (eggSender - eggReceiver),
-        feather: playerSender.feather + (featherSender - featherReceiver),
-        bug: playerReceiver.bug + (bugSender - bugReceiver),
-      });
-      await trade.update({
-        closed: true,
-      });
     },
   },
 
