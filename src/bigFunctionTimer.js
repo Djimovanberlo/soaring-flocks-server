@@ -1,7 +1,5 @@
-const Resource = require("../models").resource;
 const Player = require("../models").player;
 const Game = require("../models").game;
-const PrivateMessage = require("../models").privateMessage;
 
 async function bigFunction() {
   try {
@@ -10,7 +8,12 @@ async function bigFunction() {
         inGame: true,
       },
     });
-    console.log("ACTIVITY", activePlayers);
+    console.log(
+      "ACTIVE PLAYERS",
+      activePlayers.map((player) => {
+        return player.dataValues;
+      })
+    );
 
     activePlayers.forEach((player) => {
       const {
@@ -48,7 +51,12 @@ async function bigFunction() {
       });
     });
     const allGames = await Game.findAll();
-    console.log("GAMERZ", allGames);
+    console.log(
+      "ALL GAMES",
+      allGames.map((game) => {
+        return game.dataValues;
+      })
+    );
     allGames.forEach((game) => {
       console.log(game);
       game.update({
@@ -68,7 +76,7 @@ const bigFunctionTimer = () => {
   setInterval(function () {
     const date = new Date();
     if (date.getHours() === 12 && date.getMinutes() === 34) {
-      console.log("HALLO", date);
+      console.log("DATE", date);
       bigFunction();
     }
   }, 6000);
