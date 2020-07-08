@@ -17,6 +17,8 @@ async function startGame() {
         closed: false,
       });
       console.log("CREATED GAME", startedGame);
+    } else {
+      console.log("game with id 1 already exists");
     }
   } catch (err) {
     console.log(err);
