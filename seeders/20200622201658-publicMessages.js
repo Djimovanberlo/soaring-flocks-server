@@ -18,7 +18,7 @@ module.exports = {
           playerId: 2,
         },
         {
-          content: "I want to make a deal",
+          content: "I want to make a trade",
           createdAt: new Date(),
           updatedAt: new Date(),
           playerId: 3,

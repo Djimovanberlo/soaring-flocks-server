@@ -17,7 +17,11 @@ const resolvers = {
     async getPlayerByToken(root, { token }, { models }) {
       const plId = jwt.verify(token, "my-secret-from-env-file-in-prod");
       const player = await models.player.findByPk(plId.id);
-      return { player, token };
+      if (player) {
+        return { player, token };
+      } else if (!player) {
+        return { error: "token expired" };
+      }
     },
 
     async getGameById(root, { id }, { models }) {
@@ -93,7 +97,7 @@ const resolvers = {
       }
 
       const allPlayers = await models.player.findAll();
-      if (allPlayers.length > 25) {
+      if (allPlayers.length > 20) {
         return {
           error:
             "Playerlimit reached. No more space for new players in current version",
@@ -290,8 +294,8 @@ const resolvers = {
     },
 
     async closeTrade(root, { id, closed }, { models }) {
+      const trade = await models.trade.findByPk(id);
       await trade.update({ closed });
-      return trade;
     },
 
     async acceptTrade(
@@ -341,25 +345,25 @@ const resolvers = {
         await trade.update({
           closed: true,
         });
+      } else {
+        await playerSender.update({
+          moneyCash:
+            playerSender.moneyCash + (moneyCashReceiver - moneyCashSender),
+          egg: playerSender.egg + (eggReceiver - eggSender),
+          feather: playerSender.feather + (featherReceiver - featherSender),
+          bug: playerSender.bug + (bugReceiver - bugSender),
+        });
+        await playerReceiver.update({
+          moneyCash:
+            playerReceiver.moneyCash + (moneyCashSender - moneyCashReceiver),
+          egg: playerReceiver.egg + (eggSender - eggReceiver),
+          feather: playerSender.feather + (featherSender - featherReceiver),
+          bug: playerReceiver.bug + (bugSender - bugReceiver),
+        });
+        await trade.update({
+          closed: true,
+        });
       }
-
-      await playerSender.update({
-        moneyCash:
-          playerSender.moneyCash + (moneyCashReceiver - moneyCashSender),
-        egg: playerSender.egg + (eggReceiver - eggSender),
-        feather: playerSender.feather + (featherReceiver - featherSender),
-        bug: playerSender.bug + (bugReceiver - bugSender),
-      });
-      await playerReceiver.update({
-        moneyCash:
-          playerReceiver.moneyCash + (moneyCashSender - moneyCashReceiver),
-        egg: playerReceiver.egg + (eggSender - eggReceiver),
-        feather: playerSender.feather + (featherSender - featherReceiver),
-        bug: playerReceiver.bug + (bugSender - bugReceiver),
-      });
-      await trade.update({
-        closed: true,
-      });
     },
   },
 
