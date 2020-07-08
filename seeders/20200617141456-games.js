@@ -8,7 +8,7 @@ module.exports = {
         {
           gameTitle: "Soaring Flocks",
           gameTime: 20,
-          gameTimePassed: 10,
+          gameTimePassed: 0,
           closed: false,
           createdAt: new Date(),
           updatedAt: new Date(),
