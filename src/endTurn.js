@@ -11,7 +11,7 @@ async function endTurn() {
       },
     });
     console.log(
-      "ACTIVE PLAYERS",
+      "ACTIVE PLAYERS:",
       activePlayers.map((player) => {
         return player.dataValues;
       })
@@ -54,7 +54,7 @@ async function endTurn() {
     });
     const allGames = await Game.findAll();
     console.log(
-      "ALL GAMES",
+      "ALL GAMES:",
       allGames.map((game) => {
         return game.dataValues;
       })
