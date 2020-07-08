@@ -97,7 +97,7 @@ const resolvers = {
       }
 
       const allPlayers = await models.player.findAll();
-      if (allPlayers.length > 25) {
+      if (allPlayers.length > 20) {
         return {
           error:
             "Playerlimit reached. No more space for new players in current version",

@@ -3,7 +3,7 @@ const { defaultFieldResolver } = require("graphql");
 const Player = require("../models").player;
 const Game = require("../models").game;
 
-export default async function bigFunction() {
+export default async function endTurn() {
   try {
     const activePlayers = await Player.findAll({
       where: {
