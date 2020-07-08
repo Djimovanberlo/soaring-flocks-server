@@ -26,7 +26,7 @@ async function endGame() {
   }
 }
 
-endGame();
+module.exports.endGame = endGame;
 
 // const allPublicMessages = await models.publicMessage.findAll();
 // if (allPublicMessages.length > 100) {
