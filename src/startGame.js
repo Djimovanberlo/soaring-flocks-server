@@ -12,7 +12,7 @@ async function startGame() {
       const startedGame = await Game.create({
         id: 1,
         gameTitle: "Soaring Flocks",
-        gameTime: 20,
+        gameTime: 15,
         gameTimePassed: 0,
         closed: false,
       });
