@@ -17,7 +17,7 @@ async function endGame() {
     const allGames = await Game.findAll();
     allGames.forEach((game) => {
       game.update({
-        gameTime: 20,
+        gameTime: 15,
         gameTimePassed: 0,
       });
     });

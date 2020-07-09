@@ -9,17 +9,17 @@ const endGame = require("./src/endGame").endGame;
 const endTurn = require("./src/endTurn").endTurn;
 const pubsub = new PubSub();
 
-// cron.schedule("0 0 * * *", () => {
-//   console.log("END TURN");
-//   endTurn();
-// });
+cron.schedule("0 0 * * *", () => {
+  console.log("END TURN");
+  endTurn();
+});
 
-// cron.schedule("1 0 /20 * *", () => {
-//   console.log("END GAME");
-//   endGame();
-// });
+cron.schedule("0 5 * */15 * *", () => {
+  console.log("END GAME");
+  endGame();
+});
 
-// startGame();
+startGame();
 
 const server = new ApolloServer({
   typeDefs,
