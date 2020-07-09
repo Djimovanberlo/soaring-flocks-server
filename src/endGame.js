@@ -27,11 +27,3 @@ async function endGame() {
 }
 
 module.exports.endGame = endGame;
-
-// const allPublicMessages = await models.publicMessage.findAll();
-// if (allPublicMessages.length > 100) {
-//   await models.publicMessage.destroy({
-//     where: {},
-//   });
-// }
-// },
