@@ -27,4 +27,8 @@ const server = new ApolloServer({
   context: { models, pubsub },
 });
 
-server.listen().then(({ url }) => console.log(`🚀 Listening on port: ${url}`));
+// server.listen().then(({ url }) => console.log(`🚀 Listening on port: ${url}`));
+
+server.listen({ port: process.env.PORT || 4000 }, () => {
+  console.log(`🚀Server ready at ${process.env.PORT}`);
+});
