@@ -8,6 +8,7 @@ const startGame = require("./src/startGame").startGame;
 const endGame = require("./src/endGame").endGame;
 const endTurn = require("./src/endTurn").endTurn;
 const pubsub = new PubSub();
+const PORT = require("./config/constants");
 
 cron.schedule("0 0 * * *", () => {
   console.log("END TURN");
@@ -27,8 +28,6 @@ const server = new ApolloServer({
   context: { models, pubsub },
 });
 
-// server.listen().then(({ url }) => console.log(`🚀 Listening on port: ${url}`));
-
-server.listen({ port: process.env.PORT || 4000 }, () => {
-  console.log(`🚀Server ready at ${process.env.PORT || 4000}`);
+server.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {
+  console.log(`🚀 Server ready at ${url}`);
 });
