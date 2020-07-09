@@ -17,7 +17,7 @@
     "operatorsAliases": "0"
   },
   "production": {
-    "username": "root",
+    "username": "postgres",
     "password": null,
     "database": "database_production",
     "host": "127.0.0.1",
