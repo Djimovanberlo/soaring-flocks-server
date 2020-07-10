@@ -1,1 +1,1 @@
-release: post-release.sh
+release: node post-release.sh
