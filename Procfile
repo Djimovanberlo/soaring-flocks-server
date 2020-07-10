@@ -1,0 +1,1 @@
+release: post-release.sh
