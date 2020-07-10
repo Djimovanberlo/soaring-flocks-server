@@ -10,6 +10,7 @@ const endTurn = require("./src/endTurn").endTurn;
 const pubsub = new PubSub();
 const PORT = require("./config/constants");
 
+// schedule functions
 cron.schedule("0 0 * * *", () => {
   console.log("END TURN");
   endTurn();
