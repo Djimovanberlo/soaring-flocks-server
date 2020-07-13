@@ -14,7 +14,7 @@ cron.schedule("0 0 * * *", () => {
   endTurn();
 });
 
-cron.schedule("0 5 * */15 * *", () => {
+cron.schedule("0 5 */15 * *", () => {
   console.log("END GAME");
   endGame();
 });
