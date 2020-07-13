@@ -2,4 +2,4 @@
 
 ## Soaring Flocks | a game for capitalist fowl
 
-This repository is the backend of the fullstack app 'Soaring Flocks'. Check the [frontend repository](https://github.com/Djimovanberlo/soaring-flocks-client/blob/master/README.md) for the full readme.
+This repository is the backend of the fullstack app 'Soaring Flocks'. Check the [frontend repository](https://github.com/Djimovanberlo/soaring-flocks-client/tree/master) for the full readme.
