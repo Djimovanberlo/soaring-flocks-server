@@ -51,6 +51,9 @@ async function endTurn() {
       player.update({
         moneyCash: player.moneyCash + mMarket * 2,
       });
+      player.update({
+        vPoint: player.vPoint + vMarket,
+      });
     });
     const allGames = await Game.findAll();
     console.log(
