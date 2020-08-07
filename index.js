@@ -8,18 +8,25 @@ const startGame = require("./src/startGame").startGame;
 const endGame = require("./src/endGame").endGame;
 const endTurn = require("./src/endTurn").endTurn;
 const pubsub = new PubSub();
+const PORT = require("./config/constants");
 
-cron.schedule("0 0 * * *", () => {
+// schedule functions
+cron.schedule("0 0 */1 * *", () => {
   console.log("END TURN");
   endTurn();
 });
 
-cron.schedule("0 5 * */15 * *", () => {
+// cron.schedule("*/5 * * * *", () => {
+//   console.log("END TURN");
+//   endTurn();
+// });
+
+cron.schedule("0 5 */15 * *", () => {
   console.log("END GAME");
   endGame();
 });
 
-startGame();
+// startGame();
 
 const server = new ApolloServer({
   typeDefs,
@@ -27,4 +34,6 @@ const server = new ApolloServer({
   context: { models, pubsub },
 });
 
-server.listen().then(({ url }) => console.log(`🚀 Listening on port: ${url}`));
+server.listen({ port: process.env.PORT || 4000 }).then(({ port }) => {
+  console.log(`🚀 Server ready at ${port}`);
+});
