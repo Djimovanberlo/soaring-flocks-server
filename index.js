@@ -11,17 +11,22 @@ const pubsub = new PubSub();
 const PORT = require("./config/constants");
 
 // schedule functions
-cron.schedule("0 0 * * *", () => {
+cron.schedule("0 0 */1 * *", () => {
   console.log("END TURN");
   endTurn();
 });
+
+// cron.schedule("*/5 * * * *", () => {
+//   console.log("END TURN");
+//   endTurn();
+// });
 
 cron.schedule("0 5 */15 * *", () => {
   console.log("END GAME");
   endGame();
 });
 
-startGame();
+// startGame();
 
 const server = new ApolloServer({
   typeDefs,
