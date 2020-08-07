@@ -26,7 +26,7 @@ cron.schedule("0 5 */15 * *", () => {
   endGame();
 });
 
-// startGame();
+startGame();
 
 const server = new ApolloServer({
   typeDefs,
