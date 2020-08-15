@@ -11,11 +11,13 @@ const pubsub = new PubSub();
 const PORT = require("./config/constants");
 
 // schedule functions
-cron.schedule("0 0 */1 * *", () => {
+// cron.schedule("0 0 */1 * *", () => {
+cron.schedule("0 0 * * *", () => {
   console.log("END TURN");
   endTurn();
 });
 
+// This schedule is for development testing: runs every 5 mins
 // cron.schedule("*/5 * * * *", () => {
 //   console.log("END TURN");
 //   endTurn();

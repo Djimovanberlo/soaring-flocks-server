@@ -4,6 +4,7 @@ const Player = require("../models").player;
 const Game = require("../models").game;
 
 async function endTurn() {
+  console.log("END TURN CALLED");
   try {
     const activePlayers = await Player.findAll({
       where: {
