@@ -23,8 +23,7 @@ cron.schedule("0 1 * * *", () => {
 //   endTurn();
 // });
 
-// cron.schedule("0 5 */15 * *", () => {
-cron.schedule("0 1 0 1,15 * ?", () => {
+cron.schedule("05 1 */15 * *", () => {
   console.log("END GAME");
   endGame();
 });
