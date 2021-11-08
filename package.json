@@ -21,7 +21,7 @@
   "author": "Rein Op 't Land",
   "license": "MIT",
   "dependencies": {
-    "apollo-server": "^2.15.0",
+    "apollo-server": "^2.25.3",
     "bcrypt": "^4.0.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
